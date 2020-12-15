@@ -146,13 +146,15 @@ export default function Search({ hitsStatus }: any) {
     >
       <Overlay visible={showHits} hideSearch={hideSearch} />
       <CustomSearchBox onFocus={showSearch} isOpened={showHits} />
-      <HitsWrapper className={`${showHits ? 'show' : ''}`} onClick={hideSearch}>
-        <Index key={indexName} indexName={indexName}>
-          <Results>
-            <Hits hitComponent={DocHit} />
-          </Results>
-        </Index>
-      </HitsWrapper>
+      {showHits && (
+        <HitsWrapper className={`${showHits ? 'show' : ''}`} onClick={hideSearch}>
+          <Index key={indexName} indexName={indexName}>
+            <Results>
+              <Hits hitComponent={DocHit} />
+            </Results>
+          </Index>
+        </HitsWrapper>
+      )}
     </InstantSearch>
   )
 }
