@@ -7,11 +7,15 @@ tocDepth: 2
 
 <TopBlock>
 
-This page describes Prisma exceptions and error codes.
+This page describes Prisma Client exceptions and Prisma error codes.
 
 </TopBlock>
 
-## <inlinecode>PrismaClientKnownRequestError</inlinecode>
+## Prisma Client error types
+
+TODO Write something about how Prisma Client throws different kinds of errors, that can have the following exception types with the documented data fields for information.
+
+### <inlinecode>PrismaClientKnownRequestError</inlinecode>
 
 Prisma Client throws a `PrismaClientKnownRequestError` exception if the query engine returns a known error related to the request - for example, a unique constraint violation.
 
@@ -23,7 +27,7 @@ Prisma Client throws a `PrismaClientKnownRequestError` exception if the query en
 | `clientVersion` | Version of Prisma Client (for example, `2.19.0`)                                                                 |
 
 
-## <inlinecode>PrismaClientUnknownRequestError</inlinecode>
+### <inlinecode>PrismaClientUnknownRequestError</inlinecode>
 
 Prisma Client throws a `PrismaClientUnknownRequestError` exception if the query engine returns an error related to a request that does not have an error code.
 
@@ -32,7 +36,7 @@ Prisma Client throws a `PrismaClientUnknownRequestError` exception if the query 
 | `message`       | Error message associated with [error code](#error-codes). |
 | `clientVersion` | Version of Prisma Client (for example, `2.19.0`)          |
 
-## <inlinecode>PrismaClientRustPanicError</inlinecode>
+### <inlinecode>PrismaClientRustPanicError</inlinecode>
 
 Prisma Client throws a `PrismaClientRustPanicError` exception if the underlying engine crashes and exits with a non-zero exit code. In this case, the Prisma Client or the whole Node process must be restarted.
 
@@ -41,7 +45,7 @@ Prisma Client throws a `PrismaClientRustPanicError` exception if the underlying 
 | `message`       | Error message associated with [error code](#error-codes). |
 | `clientVersion` | Version of Prisma Client (for example, `2.19.0`)          |
 
-## <inlinecode>PrismaClientInitializationError</inlinecode>
+### <inlinecode>PrismaClientInitializationError</inlinecode>
 
 Prisma Client throws a `PrismaClientInitializationError` exception if something goes wrong when the query engine is started and the connection to the database is created. This happens either:
 
@@ -62,7 +66,7 @@ Errors that can occur include:
 | `message`       | Error message associated with error code.        |
 | `clientVersion` | Version of Prisma Client (for example, `2.19.0`) |
 
-## <inlinecode>PrismaClientValidationError</inlinecode>
+### <inlinecode>PrismaClientValidationError</inlinecode>
 
 Prisma Client throws a `PrismaClientValidationError` exception if validation fails - for example:
 
@@ -75,7 +79,7 @@ Prisma Client throws a `PrismaClientValidationError` exception if validation fai
 
 ## Error codes
 
-
+TODO Exceptions and error messages include an Error Code to uniquely identify each different error.
 
 ### Common
 
