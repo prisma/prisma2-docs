@@ -25,58 +25,25 @@ Here's an overview of its main functions:
 - Map _tables_ in the database to [Prisma models](prisma-schema/data-model#defining-models)
 - Map _columns_ in the database to the [fields](prisma-schema/data-model#defining-fields) of Prisma models
 - Map _indexes_ in the database to [indexes](prisma-schema/data-model#defining-an-index) in the Prisma schema
-- Map _database_ constraints to [attributes](prisma-schema/data-model#defining-attributes) or [type modifiers](prisma-schema/data-model#type-modifiers) in the Prisma schema
+- Map _database constraints_ to [attributes](prisma-schema/data-model#defining-attributes) or [type modifiers](prisma-schema/data-model#type-modifiers) in the Prisma schema
 
 You can learn more about how Prisma maps types from the database to the types available in the Prisma schema on the respective docs page for the data source connector:
 
-- [PostgreSQL](../database-connectors/postgresql)
-- [MySQL](../database-connectors/mysql)
-- [SQLite](../database-connectors/sqlite)
+- [PostgreSQL](../database-connectors/postgresql#type-mapping-between-postgresql-to-prisma-schema)
+- [MySQL](../database-connectors/mysql#type-mapping-between-mysql-to-prisma-schema)
+- [SQLite](../database-connectors/sqlite#data-model-mapping)
 
 ## The `prisma introspect` command
 
-You can introspect your database using the `prisma introspect` command of the [Prisma CLI](prisma-cli/installation). Note that using this command requires your [connection URL](../../reference/database-reference/connection-urls) to be set in your Prisma schema!
+You can introspect your database using the `prisma introspect` command of the [Prisma CLI](prisma-cli/installation). Note that using this command requires your [connection URL](../../reference/database-reference/connection-urls) to be set in your [Prisma schema `datasource`](prisma-schema/data-sources).
 
 Here's a high-level overview of the steps that `prisma introspect` performs internally:
 
 1. Read the [connection URL](../../reference/database-reference/connection-urls) from the `datasource` configuration in the Prisma schema
-1. Open database connection
+1. Open a connection to the database
 1. Introspect database schema (i.e. read tables, columns and other structures ...)
 1. Transform database schema into Prisma data model
 1. Write data model into Prisma schema or [update existing schema](#introspection-with-an-existing-schema)
-
-## Introspection with an existing schema
-
-In version 2.6.0 and later, running `prisma introspect` with an existing schema merges manual changes made to the schema with changes made in the database. Introspection maintains the following manual changes:
-
-- Order of `model` blocks
-- Order of `enum` blocks
-- Comments
-- `@map` and `@@map` attributes
-- `@updatedAt`
-- `@default(cuid())` (`cuid()` is a Prisma-level function)
-- `@default(uuid())` (`uuid()` is a Prisma-level function)
-- Custom `@relation` names
-
-The following properties of the schema are determined by the database:
-
-- Order of fields within `model` blocks
-- Order of values within `enum` blocks
-
-> **Note**: All `enum` blocks are listed below `model` blocks.
-
-### Force overwrite
-
-To overwrite manual changes, generate a schema based solely on the introspected database and ignore any existing schema file, add the `--force` flag to the `introspect` command:
-
-```terminal
-npx prisma introspect --force
-```
-
-Use cases include:
-
-- You want to start from scratch with a schema generated from the underlying database
-- You have an invalid schema and must use `--force` to make introspection work
 
 ## Introspection workflow
 
@@ -109,6 +76,8 @@ The general rule for identifiers is that they need to adhere to this regular exp
 [A-Za-z][A-Za-z0-9_]*
 ```
 
+#### Sanitization of invalid characters 
+
 **Invalid characters** are being sanitized during introspection:
 
 - If they appear _before_ a letter in an identifier, they get dropped.
@@ -138,7 +107,11 @@ model User {
 }
 ```
 
-If sanitization results in duplicate identifiers, no immediate error handling is in place. You get the error later and can manually fix it. Consider the case of the following two tables:
+#### Duplicate Identifiers after Sanitization
+
+If sanitization results in duplicate identifiers, no immediate error handling is in place. You get the error later and can manually fix it. 
+
+Consider the case of the following two tables:
 
 ```sql
 CREATE TABLE "42User" (
@@ -164,6 +137,12 @@ model User {
 
   @@map("24User")
 }
+```
+
+Trying to generate your Prisma Client with `prisma generate` you would get the following error:
+
+```
+TODO Add validation error message from `generate`
 ```
 
 In this case, you must manually change the name of one of the two generated `User` models because duplicate model names are not allowed in the Prisma schema.
@@ -302,6 +281,39 @@ model User {
 ```
 
 Note that you can rename the [Prisma-level](prisma-schema/relations#relation-fields) relation field to anything you like so that it looks friendlier in the generated Prisma Client API.
+
+## Introspection with an existing schema
+
+In version 2.6.0 and later, running `prisma introspect` with an existing schema file merges manual changes made to the schema with changes made in the database. Introspection maintains the following manual changes:
+
+- Order of `model` blocks
+- Order of `enum` blocks
+- Comments
+- `@map` and `@@map` attributes
+- `@updatedAt`
+- `@default(cuid())` (`cuid()` is a Prisma-level function)
+- `@default(uuid())` (`uuid()` is a Prisma-level function)
+- Custom `@relation` names
+
+The following properties of the schema are determined by the database:
+
+- Order of fields within `model` blocks
+- Order of values within `enum` blocks
+
+> **Note**: All `enum` blocks are listed below `model` blocks.
+
+### Force overwrite
+
+To overwrite manual changes, and generate a schema based solely on the introspected database and ignore any existing schema file, add the `--force` flag to the `introspect` command:
+
+```terminal
+npx prisma introspect --force
+```
+
+Use cases include:
+
+- You want to start from scratch with a schema generated from the underlying database
+- You have an invalid schema and must use `--force` to make introspection succeed
 
 ## Introspecting only a subset of your database schema
 
