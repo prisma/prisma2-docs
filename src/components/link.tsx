@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { Link as GatsbyLink } from 'gatsby'
 import isAbsoluteUrl from 'is-absolute-url'
 

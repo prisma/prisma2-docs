@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import SwitchTech from './switchTech'
 import CodeBlock from './codeBlock'
 import TabbedContent from './tabbedContent'

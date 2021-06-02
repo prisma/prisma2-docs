@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import styled from 'styled-components'
 import ArrowRight from '../../icons/ArrowRight'
 import ArrowDown from '../../icons/ArrowDown'

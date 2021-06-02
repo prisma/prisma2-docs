@@ -1,14 +1,22 @@
-import React from 'react'
+import * as React from 'react'
 import { connectSearchBox } from 'react-instantsearch-dom'
 import styled from 'styled-components'
 import SearchPic from '../../icons/Search'
 import Clear from '../../icons/Clear'
 import useWindowDimensions from '../../hooks/useWindowDimensions'
 import SearchSlash from '../../icons/SearchSlash'
+import loadable from '@loadable/component'
+
+// react-keyboard-event-handler uses the window object under the hood so we need to dynamically import it
+const KeyboardEventHandler = loadable(() => import('react-keyboard-event-handler'))
 
 const SearchBoxDiv = styled.div`
   width: 250px;
   display: flex;
+
+  & > span {
+    width: 100%;
+  }
 
   form {
     width: 250px;
@@ -132,8 +140,14 @@ const ClearIcon = styled(Clear)`
 `
 
 const DEBOUNCE_DELAY = 500
-const ESCAPE_KEY = 27
-const focusShortcuts = ['s', 191]
+
+interface SearchBoxProps {
+  refine: (value: string) => void
+  onFocus: () => void
+  isOpened: boolean
+  closeSearch: () => void
+  currentRefinement: any
+}
 
 const SearchBox = ({
   refine,
@@ -141,20 +155,17 @@ const SearchBox = ({
   currentRefinement,
   isOpened,
   closeSearch,
-  upClicked,
-  downClicked,
-  selectedInd,
   ...rest
-}: any) => {
+}: SearchBoxProps) => {
   const [value, setValue] = React.useState(currentRefinement)
 
-  const timeoutId = React.useRef(null)
-  const inputEl = React.useRef(null)
+  const timeoutId = React.useRef<number | null>(null)
+  const inputEl = React.useRef<HTMLInputElement | null>(null)
   const { width } = useWindowDimensions()
   const [placeholderText, setPlaceholderText] = React.useState('Search Documentation...')
 
-  const onChange = (e: any) => {
-    const { value: newValue } = e.target
+  const onChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const { value: newValue } = e.currentTarget
 
     // After the user manually cleared the input, call `refine` without waiting so that the search
     // closes instantly.
@@ -164,94 +175,60 @@ const SearchBox = ({
 
     // Otherwise, debounce the search to avoid triggering many queries at once, which could also
     // make the UI freeze.
-    window.clearTimeout(timeoutId.current)
+    window.clearTimeout(timeoutId.current as number)
     timeoutId.current = window.setTimeout(() => refine(newValue), DEBOUNCE_DELAY)
     setValue(newValue)
-    inputEl.current.blur()
-    inputEl.current.focus()
+
+    inputEl.current?.blur()
+    inputEl.current?.focus()
   }
 
   const clearInput = () => {
-    window.clearTimeout(timeoutId.current)
-    setValue('')
-    refine('')
+    if (timeoutId.current) {
+      window.clearTimeout(timeoutId.current)
+      setValue('')
+      refine('')
+    }
   }
 
-  // Focus shortcuts on keydown
-  const onKeyDown = (e: any) => {
-    if (e && e.keyCode == ESCAPE_KEY) {
-      closeSearch()
-    } else if (e && e.keyCode === 40) {
-      downClicked()
-    } else if (e && e.keyCode === 38) {
-      upClicked()
-    }
-
-    const shortcuts = focusShortcuts.map(key =>
-      typeof key === 'string' ? key.toUpperCase().charCodeAt(0) : key
-    )
-
-    const elt = e.target || e.srcElement
-    const tagName = elt.tagName
-    if (
-      elt.isContentEditable ||
-      tagName === 'INPUT' ||
-      tagName === 'SELECT' ||
-      tagName === 'TEXTAREA'
-    ) {
-      // already in an input
-      return
-    }
-
-    const which = e.which || e.keyCode
-    if (shortcuts.indexOf(which) === -1) {
-      // not the right shortcut
-      return
-    }
-
-    inputEl.current.focus()
-    e.stopPropagation()
-    e.preventDefault()
-  }
-
-  const onSubmit = (e: any) => {
+  const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    inputEl.current.blur()
-
+    inputEl.current?.blur()
     return false
   }
 
   React.useEffect(() => {
-    document.addEventListener('keydown', onKeyDown)
     if (width > 640) {
       setPlaceholderText('Search Documentation...')
     }
   }, [])
 
   return (
-    <SearchBoxDiv className={isOpened ? 'opened' : ''}>
-      <form onSubmit={onSubmit}>
-        <SearchIcon />
-        <input
-          ref={inputEl}
-          type="text"
-          placeholder={placeholderText}
-          aria-label="Search Documentation..."
-          onChange={onChange}
-          onFocus={onFocus}
-          value={value}
-          {...rest}
-        />
+      <SearchBoxDiv className={isOpened ? 'opened' : ''}>
+        <KeyboardEventHandler handleKeys={['40', '38', '27', '191']}>
+        <form onSubmit={onSubmit}>
+          <SearchIcon />
+          <input
+            ref={inputEl}
+            type="text"
+            placeholder={placeholderText}
+            aria-label="Search Documentation..."
+            onChange={onChange}
+            onFocus={onFocus}
+            value={value}
+            {...rest}
+          />
 
-        {value !== '' && isOpened && (
-          <span className="clear">
-            <ClearIcon onClick={clearInput} />
-          </span>
-        )}
-        {!isOpened && <SearchSlashIcon />}
-      </form>
-    </SearchBoxDiv>
+          {value !== '' && isOpened && (
+            <span className="clear">
+              <ClearIcon onClick={clearInput} />
+            </span>
+          )}
+          {!isOpened && <SearchSlashIcon />}
+        </form>
+        </KeyboardEventHandler>
+      </SearchBoxDiv>
   )
 }
 

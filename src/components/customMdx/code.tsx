@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import Highlight, { defaultProps } from 'prism-react-renderer'
 import rangeParser from 'parse-numeric-range'
 import theme from 'prism-react-renderer/themes/github'

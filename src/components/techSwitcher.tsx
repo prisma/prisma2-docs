@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import styled from 'styled-components'
 import { Typescript } from '../icons/technologies/Typescript'
 import SelectComponent from './select'

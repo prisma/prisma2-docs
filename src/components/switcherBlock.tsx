@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import styled from 'styled-components'
 import TechnologySwitch from './techSwitcher'
 import { urlGenerator } from '../utils/urlGenerator'

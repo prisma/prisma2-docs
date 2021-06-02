@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import * as React from 'react'
 import TreeNode from './treeNode'
 import { AllEdges } from '../../interfaces/AllArticles.interface'
 import { createGlobalState } from 'react-hooks-global-state'
@@ -12,7 +12,7 @@ const { useGlobalState } = createGlobalState(initialState)
 
 const Tree = ({ edges }: AllEdges) => {
   const location = useLocation()
-  let [treeData] = useState(() => {
+  let [treeData] = React.useState(() => {
     return calculateTreeData(edges, defaultCollapsed, location)
   })
 

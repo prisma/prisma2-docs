@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { Snippet } from 'react-instantsearch-dom'
 import Link from '../link'
 import styled from 'styled-components'
