@@ -41,7 +41,7 @@
     "gatsby-transformer-sharp": "2.12.1",
     "is-absolute-url": "3.0.3",
     "lodash": "4.17.21",
-    "netlify-lambda": "2.0.8",
+    "netlify-lambda": "2.0.11",
     "parse-numeric-range": "1.2.0",
     "path-browserify": "1.0.1",
     "prism-react-renderer": "1.2.1",
