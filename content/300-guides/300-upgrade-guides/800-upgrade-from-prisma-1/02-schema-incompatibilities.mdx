@@ -880,3 +880,11 @@ If your relation is configured via `table: INLINE`, you can still get the same b
 Cascading deletes are not yet supported in Prisma 2. For _inline_ relations, you can configure similar behavior as in Prisma 1 in plain SQL (find the guides [here](../../database/advanced-database-tasks/cascading-deletes/postgresql)). For relations that were represented as relation tables in Prisma 1, you won't be able to configure cascading deletes on the database layer for now and might have to resort to implementing it inside your application code with Prisma Client.
 
 > **Note**: If you need to implement cascading deletes in your application layer, this [tool](https://paljs.com/plugins/delete) by our community member [Ahmed Elywa](https://github.com/AhmedElywa/) might come in handy.
+
+
+## Dealing with/Sending decimal values as numbers is not supported in Prisma 2
+
+### Problem
+
+Prisma 1 enabled working with DECIMAL fields as if they were FLOAT. But in Prisma 2, all FLOAT fields are mapped to DECIMAL in the Prisma schema and client. Which means you're going to need to work with a new dependency called Decimal.js that will make it hard for you to work as you used to do. Examples of that would be the inability to keep floating values as numbers, since you're forced to send strings. Also on the backend you're going to need to change all your resolvers/controllers to work with this Decimal.js dependency for math operations. In addition to changing types if you use typescript. So, with this breaking change, you're forced to do a lot of code refactoring(especailly on the client side), which might not always be doable(in case of mobile apps that has to wait weeks to update an ap).
+
