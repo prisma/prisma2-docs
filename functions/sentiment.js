@@ -17,7 +17,7 @@ exports.handler = async function(event, context, callback) {
   }
   const pageUrl = stripTrailingSlash(body.pageUrl)
 
-  await client.feedback.create({
+  const feedback = await client.feedback.create({
     data: {
       pageUrl,
       ip: event.headers['x-forwarded-for'],
@@ -28,7 +28,10 @@ exports.handler = async function(event, context, callback) {
 
   return {
     statusCode: 200,
-    body: JSON.stringify({ success: true }),
+    body: JSON.stringify({ 
+      success: true,
+      id: feedback.id
+    }),
   }
 }
 

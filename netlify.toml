@@ -8,6 +8,10 @@ package = "netlify-plugin-gatsby-cache"
 [context.production.environment]
 INDEX_ALGOLIA = "true"
 
+[context.deploy-preview.environment]
+INDEX_ALGOLIA = "false"
+DEPLOY_PREVIEW = "true"
+
 [[headers]]
   for = "/*"
   [headers.values]

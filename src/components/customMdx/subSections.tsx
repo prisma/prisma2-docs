@@ -68,7 +68,7 @@ const Subsections = ({ depth, rootPath }: SubsecProps) => {
     const subs = subsecs.filter((t: any) => t.label !== 'index' && !t.hidePage).sort(sortOnLabel)
 
     // If the first title has a number (1.) then we can assume the rest to do.
-    if (titleHasNumber.test(subs[0].title)) {
+    if (subs && subs[0] && titleHasNumber.test(subs[0].title)) {
       subs.sort(sortOnTitleNumbers)
     }
     return (
