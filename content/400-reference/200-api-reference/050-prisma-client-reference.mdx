@@ -477,24 +477,46 @@ export type UserFindUniqueArgs = {
 
 #### Examples
 
+/*shiki twoslash prisma client extraction*/
+
+```twoslash include setup
+import { MockProxy } from 'jest-mock-extended'
+
+import { PrismaClient } from '@prisma/client'
+
+const prismaC = new PrismaClient()
+
+const prisma = (prismaC as unknown) as MockProxy<PrismaClient>
+```
+
 ##### Get the `User` record with an `id` of `42`
 
-```ts
-const result = await prisma.user.findUnique({
-  where: {
-    id: 42,
-  },
-})
+```ts twoslash
+// @include: setup
+// ---cut---
+// @module: esnext
+// @target: esnext
+// @errors: 2769
+  const result = await prisma.user.findUnique({
+    where: {
+      id: 42,
+    },
+  })
 ```
 
 ##### Get the `User` record with an `email` of `alice@prisma.io`
 
-```ts
-const result = await prisma.user.findUnique({
-  where: {
-    email: 'alice@prisma.io',
-  },
-})
+```ts twoslash
+// @include: setup
+// ---cut---
+// @module: esnext
+// @target: esnext
+// @errors: 2769
+  const result = await prisma.user.findUnique({
+    where: {
+      email: 'alice@prisma.io',
+    },
+  })
 ```
 
 ##### Get the `User` record with `firstName` of `Alice` and `lastName` of `Smith` (`@@unique`)

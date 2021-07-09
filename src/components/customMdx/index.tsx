@@ -4,7 +4,7 @@ import CodeBlock from './codeBlock'
 import TabbedContent from './tabbedContent'
 import ParallelBlocks from './parallelBlocks'
 import CodeWithResult from './codeWithResult'
-import Code from './code'
+// import Code from './code'
 import CollapseBox from './collapsible'
 import Table from './table'
 import ButtonLink from './button'
@@ -35,7 +35,7 @@ export default {
   SwitchTech,
   FileWithIcon,
   inlineCode: (props: any) => <code className="inline-code" {...props} />,
-  code: Code,
+  // code: Code,
   details: CollapseBox,
   table: Table,
   ButtonLink,

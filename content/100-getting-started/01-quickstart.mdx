@@ -17,6 +17,13 @@ The following guide will get you up and running as quickly as possible by coveri
 
 </TopBlock>
 
+```ts twoslash
+interface User {
+  name: string;
+  id: number;
+}
+```
+
 ## 1. Download the starter project
 
 Open your terminal and use the following command to download the starter project.
@@ -61,10 +68,16 @@ One of the main features of Prisma Client is the ease of working with [relations
 
 Add the highlighted code to the main function in the `script.ts` file.
 
-```ts file=script.ts highlight=7,8,9,10,11;add
+```ts twoslash {7,8,9,10,11}
+import { MockProxy } from 'jest-mock-extended'
+
 import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient()
+const prismaC = new PrismaClient()
+
+const prisma = (prismaC as unknown) as MockProxy<PrismaClient>
+// ---cut---
+// @errors: 2339
 
 // A `main` function so that you can use async/await
 async function main() {

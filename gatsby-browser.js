@@ -1,5 +1,6 @@
 const { init, trackPage } = require('./src/utils/stats')
 const { goToNav } = require('./src/utils/goToNavItem')
+require('./src/components/customMdx/code.css')
 
 exports.onClientEntry = () => {
   init()

@@ -37,6 +37,12 @@ const gatsbyRemarkPlugins = [
       destinationDir: 'static',
     },
   },
+  {
+    resolve: 'gatsby-remark-shiki-twoslash',
+    options: {
+      theme: 'slack-theme-ochin',
+    },
+  },
 ]
 const algoliaPlugin = {
   resolve: `gatsby-plugin-algolia`,
@@ -122,7 +128,7 @@ let plugins = [
 ]
 
 //if (process.env.INDEX_ALGOLIA === 'true') {
-  plugins = [...plugins, algoliaPlugin]
+plugins = [...plugins, algoliaPlugin]
 //}
 
 module.exports = {

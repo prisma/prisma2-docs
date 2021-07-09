@@ -20,6 +20,7 @@ const ArticleLayout = ({
   if (!data) {
     return null
   }
+
   const {
     mdx: {
       fields: { slug, modSlug },

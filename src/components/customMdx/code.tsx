@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Highlight, { defaultProps } from 'prism-react-renderer'
 import rangeParser from 'parse-numeric-range'
-import theme from 'prism-react-renderer/themes/github'
+// import theme from 'prism-react-renderer/themes/github'
 import CopyButton from './copy'
 import Copy from '../../icons/Copy'
 import { stringify } from '../../utils/stringify'
@@ -93,7 +93,7 @@ const Code = ({ children, className, ...props }: PreCodeProps) => {
         </div>
       )}
       <div className="gatsby-highlight pre-highlight">
-        <Highlight {...defaultProps} code={code} language={language} theme={theme}>
+        <Highlight {...defaultProps} code={code} language={language}>
           {({ className: blockClassName, style, tokens, getLineProps, getTokenProps }) => (
             <Pre className={`${blockClassName} ${isTerminal ? 'is-terminal' : ''}`} style={style}>
               {(props['copy'] || language === 'copy') && (
@@ -215,6 +215,8 @@ const CodeWrapper = styled.div`
     font-family: ${(p) => p.theme.fonts.text};
     margin-bottom: 0.5rem;
   }
+
+  overflow: auto;
 `
 
 const AbsoluteCopyButton = styled.div`
@@ -237,6 +239,14 @@ const Pre = styled.pre`
   padding: 2rem 1rem 1rem 1rem;
   overflow: auto;
   webkit-overflow-scrolling: touch;
+
+  &.shiki {
+    overflow: initial;
+  }
+
+  &.twoslash {
+    border-color: #719af4;
+  }
 `
 const Line = styled.div`
   display: block;
