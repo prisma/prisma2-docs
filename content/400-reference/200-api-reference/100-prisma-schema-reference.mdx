@@ -91,7 +91,6 @@ datasource db {
 
 Learn more about MongoDB connection strings [here](../../../concepts/database-connectors/mongodb).
 
-
 #### Specify a SQLite data source
 
 In this example, the target database is located in a file called `dev.db`:
@@ -998,7 +997,7 @@ Defines a single-field ID on the model.
 
 ##### Relational databases
 
-- Corresponding database type: `PRIMARY KEY`
+- Corresponding database type: [`PRIMARY KEY` constraint]()
 - Can be annotated with a [`@default()`](#default) value that uses [functions](#attribute-functions) to auto-generate an ID:
 
   - [`autoincrement()`](#autoincrement)
@@ -1033,12 +1032,14 @@ Defines a single-field ID on the model.
 
 #### Arguments
 
-N/A
+| Name                                                                                                                      | Required | Type     | Description                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `map` ([2.XX.0](https://github.com/prisma/prisma/releases/tag/2.XX.0) and later with the `namedConstraints` Preview flag) | No       | `String` | The constraint name in the underlying database. Default naming convention: `{table_name}_pk` (for example, `users_pk`) |
 
 #### Signature
 
 ```prisma no-lines
-@id
+@id(_ map: String)
 ```
 
 #### Examples
@@ -1286,7 +1287,7 @@ Defines a multi-field ID (composite ID) on the model.
 
 #### Remarks
 
-- Corresponding database type: `PRIMARY KEY`
+- Corresponding database type: [`PRIMARY KEY` constraint]()
 - Can be annotated with a [`@default()`](#default) value that uses [functions](#attribute-functions) to auto-generate an ID
 - Cannot be optional
 - Can be defined on any scalar field (`String`, `Int`, `enum`)
@@ -1295,9 +1296,11 @@ Defines a multi-field ID (composite ID) on the model.
 
 #### Arguments
 
-| Name     | Required | Type               | Description                                                      |
-| -------- | -------- | ------------------ | ---------------------------------------------------------------- |
-| `fields` | **Yes**  | `FieldReference[]` | A list of field names - for example, `["firstname", "lastname"]` |
+| Name                                                                                                                      | Required | Type               | Description                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `fields`                                                                                                                  | **Yes**  | `FieldReference[]` | A list of field names - for example, `["firstname", "lastname"]`                                                       |
+| `name`                                                                                                                    | No       | `String`           | The name of the field in the generated client - defaults to `field1_field2`                                            |
+| `map` ([2.XX.0](https://github.com/prisma/prisma/releases/tag/2.XX.0) and later with the `namedConstraints` Preview flag) | No       | `String`           | The constraint name in the underlying database. Default naming convention: `{table_name}_pk` (for example, `users_pk`) |
 
 The name of the `fields` argument on the `@@id` attribute can be omitted:
 
@@ -1309,7 +1312,7 @@ The name of the `fields` argument on the `@@id` attribute can be omitted:
 #### Signature
 
 ```ts no-lines
-@@id(_ fields: FieldReference[])
+@@id(_ fields: FieldReference[], name: String?, map: String?)
 ```
 
 ##### Specify a multi-field ID on two `String` fields
@@ -1514,7 +1517,7 @@ id Int @id @default(autoincrement())
 #### Signature
 
 ```ts no-lines
-@default(_ value: Expression)
+@default(_ value: Expression, map: String?)
 ```
 
 #### Examples
@@ -1784,7 +1787,7 @@ Defines a unique constraint for this field.
 
 ##### Relational databases
 
-- Corresponding database type: `UNIQUE`
+- Corresponding database type: [`UNIQUE` constraint]()
 - `NULL` values are considered to be distinct (multiple rows with `NULL` values in the same column are allowed)
 - Adding a unique constraint automatically adds a corresponding _unique index_ to the specified column(s).
 
@@ -1794,12 +1797,14 @@ Defines a unique constraint for this field.
 
 #### Arguments
 
-N/A
+| Name                                                                                                                      | Required | Type     | Description                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `map` ([2.XX.0](https://github.com/prisma/prisma/releases/tag/2.XX.0) and later with the `namedConstraints` Preview flag) | No       | `String` | The constraint name in the underlying database. Default naming convention: `{table_name}_{column_names}_uniq` (for example, `users_col1_uniq`) |
 
 #### Signature
 
-```no-lines
-@unique
+```ts no-lines
+@unique(_ map: String?)
 ```
 
 #### Examples
@@ -1957,7 +1962,7 @@ Defines a compound [unique constraint](../../../concepts/components/prisma-schem
 
 ##### Relational databases
 
-- Corresponding database type: `UNIQUE`
+- Corresponding database type: [`UNIQUE` constraint]()
 - A `@@unique` block is required if it represents the only unique constraint on a model without an `@id` / `@@id`
 - Adding a unique constraint automatically adds a corresponding _unique index_ to the specified column(s)
 
@@ -1968,23 +1973,24 @@ Defines a compound [unique constraint](../../../concepts/components/prisma-schem
 
 #### Arguments
 
-| Name     | Required | Type               | Description                                                                                               |
-| -------- | -------- | ------------------ | --------------------------------------------------------------------------------------------------------- |
-| `fields` | **Yes**  | `FieldReference[]` | A list of field names - for example, `["firstname", "lastname"]`. Fields must be mandatory - see remarks. |
-| `name`   | **No**   | `String`           | The name of the unique combination of fields - defaults to `fieldName1_fieldName2_fieldName3`             |
+| Name                                                                                                                      | Required | Type               | Description                                                                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fields`                                                                                                                  | **Yes**  | `FieldReference[]` | A list of field names - for example, `["firstname", "lastname"]`. Fields must be mandatory - see remarks.                                                                                                   |
+| `name`                                                                                                                    | **No**   | `String`           | The name of the unique combination of fields that is [reflected in the generated Prisma Client](#specify-a-custom-name-for-a-multi-field-unique-attribute) - defaults to `fieldName1_fieldName2_fieldName3` |
+| `map` ([2.XX.0](https://github.com/prisma/prisma/releases/tag/2.XX.0 with the `namedConstraints` Preview flag) and later) | No       | `String`           | The constraint name in the underlying database. Default naming convention: `{table_name}_{column_names}_uniq` (for example, `users_col1_col2_uniq`)                                                         |
 
 The name of the `fields` argument on the `@@unique` attribute can be omitted:
 
 ```prisma no-lines
 @@unique(fields: [title, author])
 @@unique([title, author])
-@@unique(fields: [title, author], name: "titleAuthor")
+@@unique(fields: [title, author], name: "titleAuthor", map: "myConstraintName")
 ```
 
 #### Signature
 
 ```ts no-lines
-@@unique(_ fields: FieldReference[], name: String?)
+@@unique(_ fields: FieldReference[], name: String?, map: String?)
 ```
 
 #### Examples
@@ -2173,6 +2179,7 @@ Defines an index in the database.
 
 - Corresponding database type: `INDEX`
 - It is currently not possible to provide more configuration options to the index:
+
   - PostgreSQL
     - Define index fields as expressions (e.g. `CREATE INDEX title ON public."Post"((lower(title)) text_ops);`)
     - Specify index methods with `USING`; PostgreSQL supports these index methods: B-tree, hash, GiST, and GIN; Prisma uses B-Tree by default
@@ -2181,11 +2188,11 @@ Defines an index in the database.
   - MySQL
     - Specify index methods with `USING`; MySQL supports these index methods: B-tree, hash; Prisma uses B-Tree by default
 
-<Admonition type="info">
- 
-While you cannot configure these option in your Prisma schema, you can still configure them on the database-level directly.
+  <Admonition type="info">
 
-</Admonition>
+  While you cannot configure these option in your Prisma schema, you can still configure them on the database-level directly.
+
+  </Admonition>
 
 ##### MongoDB
 
@@ -2198,22 +2205,23 @@ Introspection and Prisma Migrate do not currently support MongoDB, which means P
 
 #### Arguments
 
-| Name     | Required | Type               | Description                                                                                                                                                                                                                                 |
-| -------- | -------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `fields` | **Yes**  | `FieldReference[]` | A list of field names - for example, `["firstname", "lastname"]`                                                                                                                                                                            |
-| `name`   | **No**   | `name`             | The name of the index in the underlying database (Prisma generates an index name that respects identifier length limits if you do not specify a name. Prisma uses the following naming convention: `tablename.field1_field2_field3_unique`) |
+| Name                                                                                                                                       | Required | Type               | Description                                                                                                                                                                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------------------------------------------ | -------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fields`                                                                                                                                   | **Yes**  | `FieldReference[]` | A list of field names - for example, `["firstname", "lastname"]`                                                                                                                                                                                                             |
+| `map` ([2.XX.0](https://github.com/prisma/prisma/releases/tag/2.XX.0) and later with the `namedConstraints` Preview flag, replaces `name`) | No       | `String`           | The index name in the underlying database. Default naming convention: `{table_name}_{column_names}_idx` (for example, `users_col1_col2_idx`) for globally unique indexes and `{column_names}_idx` for indexes that are only unique at table level (for example: `col1_idx1`) |
 
 The _name_ of the `fields` argument on the `@@index` attribute can be omitted:
 
 ```prisma no-lines
 @@index(fields: [title, author])
 @@index([title, author])
+@@index([title, author], map: "MyConstraintName")
 ```
 
 #### Signature
 
 ```ts no-lines
-@@index(_ fields: FieldReference[], name: String?)
+@@index(_ fields: FieldReference[], map: String?)
 ```
 
 #### Examples
@@ -2288,7 +2296,7 @@ Defines meta information about the relation. [Learn more](../../concepts/compone
 
 ##### Relational databases
 
-- Corresponding database types: `FOREIGN KEY` / `REFERENCES`
+- Corresponding database types: [`FOREIGN KEY` / `REFERENCES` constraint]()
 
 ##### MongoDB
 
@@ -2296,11 +2304,12 @@ Defines meta information about the relation. [Learn more](../../concepts/compone
 
 #### Arguments
 
-| Name         | Type               | Required                                                                                                                                           | Description                                                                                                                               | Example                                               |
-| :----------- | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------- |
-| `name`       | `String`           | Sometimes (e.g. to disambiguate a relation)                                                                                                        | Defines the name of the relationship. In an m-n-relation, it also determines the name of the underlying relation table.                   | `"CategoryOnPost"`, `"MyRelation"`                    |
-| `fields`     | `FieldReference[]` | On [annotated](../../../../../../concepts/components/prisma-schema/relations#annotated-relation-fields-and-relation-scalar-fields) relation fields | A list of [fields](../../../concepts/components/prisma-schema/data-model#defining-fields of the _current_ model                           | `["authorId"]`, `["authorFirstName, authorLastName"]` |
-| `references` | `FieldReference[]` | On [annotated](../../../../../../concepts/components/prisma-schema/relations#annotated-relation-fields-and-relation-scalar-fields) relation fields | A list of [fields](../../../concepts/components/prisma-schema/data-model#defining-fields of the model on _the other side of the relation_ | `["id"]`, `["firstName, lastName"]`                   |
+| Name                                                                                                                      | Type               | Required                                                                                                                                           | Description                                                                                                                                | Example                                               |
+| :------------------------------------------------------------------------------------------------------------------------ | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------- |
+| `name`                                                                                                                    | `String`           | Sometimes (e.g. to disambiguate a relation)                                                                                                        | Defines the name of the relationship. In an m-n-relation, it also determines the name of the underlying relation table.                    | `"CategoryOnPost"`, `"MyRelation"`                    |
+| `fields`                                                                                                                  | `FieldReference[]` | On [annotated](../../../../../../concepts/components/prisma-schema/relations#annotated-relation-fields-and-relation-scalar-fields) relation fields | A list of [fields](../../../concepts/components/prisma-schema/data-model#defining-fields of the _current_ model                            | `["authorId"]`, `["authorFirstName, authorLastName"]` |
+| `references`                                                                                                              | `FieldReference[]` | On [annotated](../../../../../../concepts/components/prisma-schema/relations#annotated-relation-fields-and-relation-scalar-fields) relation fields | A list of [fields](../../../concepts/components/prisma-schema/data-model#defining-fields of the model on _the other side of the relation_  | `["id"]`, `["firstName, lastName"]`                   |
+| `map` ([2.XX.0](https://github.com/prisma/prisma/releases/tag/2.XX.0) and later with the `namedConstraints` Preview flag) | No                 | `String`                                                                                                                                           | The index name in the underlying database. Default naming convention: `{table_name}_{column_names}_fkey` (for example, `post_userid_fkey`) | |
 
 The name of the `name` argument on the `@relation` attribute can be omitted (`references` is required):
 
@@ -2317,7 +2326,7 @@ The name of the `name` argument on the `@relation` attribute can be omitted (`re
 #### Signature
 
 ```ts no-lines
-@relation(_ name: String?, fields: FieldReference[]?, references: FieldReference[]?)
+@relation(_ name: String?, fields: FieldReference[]?, references: FieldReference[]?, map: String?)
 ```
 
 #### Examples

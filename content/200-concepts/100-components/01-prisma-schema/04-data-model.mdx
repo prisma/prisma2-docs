@@ -67,7 +67,6 @@ enum Role {
 }
 ```
 
-
 </tab>
 <tab>
 
@@ -129,16 +128,15 @@ The data model definition is made up of:
 - [Enums](#defining-enums) ([`enum`](../../../reference/api-reference/prisma-schema-reference#enum) <span class="api"></span> primitives) (if your connector supports Enums)
 - [Attributes](#defining-attributes) and [functions](#using-functions) that change the behavior of fields and models
 
-The corresponding database looks like this:
+<details> <summary> A model maps to the underlying structures of the data source. Expand for examples.
 
-![](prisma-schema/sample-database.png)
+</summary>
 
-<details><summary>A model maps to the underlying structures of the data source.</summary>
+- In relational databases like PostgreSQL and MySQL, a `model` maps to a **table**. The sample schema maps to the following relational database:
 
-- In relational databases like PostgreSQL and MySQL, a `model` maps to a **table**
-- In MongoDB, a `model` maps to a **collection**
+  ![](prisma-schema/sample-database.png)
 
-> **Note**: In the future there might be connectors for non-relational databases and other data sources. For example, for a REST API it would map to a _resource_.
+- In MongoDB, a `model` maps to a **collection**.
 
 </details>
 
@@ -234,7 +232,7 @@ async function main() {
 }
 
 main()
-  .catch(e => {
+  .catch((e) => {
     throw e
   })
   .finally(async () => {
@@ -283,30 +281,12 @@ model Tag {
 }
 ```
 
-### Mapping model names to tables or collections
+<Admonition type="info">
 
-Prisma model [naming conventions (singular form, PascalCase)](../../../reference/api-reference/prisma-schema-reference#naming-conventions) <span class="api"></span> do not always match table names in the database. A common approach for naming tables/collections in databases is to use plural form and [snake_case](https://en.wikipedia.org/wiki/Snake_case) notation - for example: `comments`. When you introspect a database with a table named `comments`, the result Prisma model will look like this:
+**Table or collection names in the underlying database** <br />
+You can optionally [map Prisma model names to a different table/collection name](names-in-underlying-database#mapping-collectiontable-and-fieldcolumn-names) in the underlying database.
 
-```prisma
-model comments {
-   // Fields
-}
-```
-
-However, you can still adhere to the naming convention without renaming the underlying `comments` table in the database by using the [`@@map`](../../../reference/api-reference/prisma-schema-reference#map-1) <span class="api"></span> attribute:
-
-```prisma
-model Comment {
-   // Fields
-  @@map(name: "comments")
-}
-```
-
-With this model definition, Prisma automatically maps the `Comment` model to the `comments` table in the underlying database.
-
-> **Note**: You can also [`@map`](../../../reference/api-reference/prisma-schema-reference#map) <span class="api"></span> a column name or enum value, and `@@map` an enum.
-
-`@map` and `@@map` allow you to [tune the shape of your Prisma Client API](../prisma-client/working-with-prismaclient/use-custom-model-and-field-names#using-map-and-map-to-rename-fields-and-models-in-the-prisma-client-api) by decoupling model and field names from table and column names in the underlying database.
+</Admonition>
 
 ## Defining fields
 
@@ -361,21 +341,27 @@ model Tag {
 
 ```prisma
 model Comment {
-|  id      String   @id @default(dbgenerated()) @db.ObjectId @map("_id")
-|  title   String
-|  content String
+  id       String   @id @default(dbgenerated()) @db.ObjectId @map("_id")
+  title    String
+  content  String
 }
 
 model Tag {
-|  name    String @id @map("_id")
+  name  String @id @map("_id")
 }
 ```
 
 </tab>
 </TabbedContent>
 
-
 See [complete list of scalar field types](../../../reference/api-reference/prisma-schema-reference#model-field-scalar-types) <span class="api"></span>.
+
+<Admonition type="info">
+
+**Column or field names in the underlying database** <br />
+You can optionally [map Prisma schema field names to a different field names](names-in-underlying-database#mapping-collectiontable-and-fieldcolumn-names) in the underlying database.
+
+</Admonition>
 
 ### Relation fields
 
@@ -420,9 +406,14 @@ model Comment {
 </tab>
 </TabbedContent>
 
-
-
 Refer to the [relations documentation](relations) for more examples and information about relationships between models.
+
+<Admonition type="info">
+
+**Constraint names in relational databases** <br />
+You can optionally define a [custom foreign key constraint name](names-in-underlying-database#constraint-and-index-names-preview) in the underlying database.
+
+</Admonition>
 
 ### Native types mapping
 
@@ -443,7 +434,6 @@ model Post {
 <tab>
 </tab>
 </TabbedContent>
-
 
 Type attributes are _only_ added to the schema if the underlying native type is **not the default type**. For example, if you are using the PostgreSQL provider, `String` fields where the underlying native type is `text` will not have a type attribute.
 
@@ -486,7 +476,6 @@ model Post {
 </tab>
 <tab>
 
-
 ```prisma
 model Post {
   id          String         @id @default(dbgenerated()) @db.ObjectId @map("_id")
@@ -498,7 +487,6 @@ model Post {
 
 </tab>
 </TabbedContent>
-
 
 > **Note**: Scalar lists are **only** supported if the database connector supports scalar lists, either natively or at a Prisma level.
 
@@ -519,7 +507,6 @@ model Tag {
 }
 ```
 
-
 </tab>
 <tab>
 
@@ -535,18 +522,16 @@ model Tag {
 }
 ```
 
-
 </tab>
 </TabbedContent>
-
 
 When **not** annotating a field with the `?` type modifier, the field will be _required_ on every record of the model. This has effects on two levels:
 
 - **Relational databases**: Required fields are represented via `NOT NULL` constraints in the underlying database.
- 
+
     <Admonition type="info">
 
-    The MongoDB connector does not enforce constraints at database level.
+  The MongoDB connector does not enforce constraints at database level.
 
     </Admonition>
 
@@ -568,7 +553,6 @@ When you introspect a database, unsupported types are added as [`Unsupported`](.
 <TabbedContent tabs={[<FileWithIcon text="Relational databases only" icon="database"/>]}>
 <tab>
 
-
 ```prisma
 location    Unsupported("polygon")?
 ```
@@ -577,7 +561,6 @@ location    Unsupported("polygon")?
 <tab>
 </tab>
 </TabbedContent>
-
 
 The `Unsupported` attribute allows you to define fields in the Prisma schema for database types that are not yet supported by Prisma. For example, MySQL's `POLYGON` type is not currently supported by Prisma, but can now be added to the Prisma schema using the `Unsupported("polygon")` type.
 
@@ -622,9 +605,7 @@ model User {
 </tab>
 </TabbedContent>
 
-
-
-Some attributes accept [arguments](../../../reference/api-reference/prisma-schema-reference#attribute-argument-types) <span class="api"></span> - for example, `@default` accepts `true` or `false`:
+Some attributes accept [arguments](../../../reference/api-reference/prisma-schema-reference#attribute-argument-types) <span class="api"></span> - for example, `@default` on a `Boolean` field accepts `true` or `false`:
 
 ```prisma
 isAdmin   Boolean @default(false) // short form of @default(value: false)
@@ -664,14 +645,12 @@ model User {
 </tab>
 <tab>
 
-
 </tab>
 </TabbedContent>
 
 ##### Composite IDs
 
 In the following example, the `User` ID is represented by a combination of the `firstName` and `lastName` fields:
-
 
 <TabbedContent tabs={[<FileWithIcon text="Relational databases only" icon="database"/>]}>
 <tab>
@@ -714,6 +693,13 @@ model User {
 </tab>
 </TabbedContent>
 
+<Admonition type="info">
+
+**Constraint names in relational databases** <br />
+You can optionally define a [custom primary key constraint name](names-in-underlying-database#constraint-and-index-names-preview) in the underlying database.
+
+</Admonition>
+
 #### Defining IDs in MongoDB
 
 The MongoDB connector has [specific rules for defining an ID field](../../../reference/api-reference/prisma-schema-reference#mongodb) <span class="api"></span> that differs from relational databases. An ID must be defined by a single field using the [`@id`](../../../reference/api-reference/prisma-schema-reference#id) <span class="api"></span> attribute and must include `@map("_id")`.
@@ -737,7 +723,6 @@ model User {
 </tab>
 <tab>
 
-
 </tab>
 
 </TabbedContent>
@@ -760,7 +745,6 @@ model User {
 
 </tab>
 <tab>
-
 
 </tab>
 
@@ -812,8 +796,8 @@ model Post {
 
 `@default` attributes either:
 
-* Represent `DEFAULT` values in the underlying database (relational databases only) _or_
-* Use a Prisma-level function. For example, `cuid()` and `uuid()` are provided by Prisma's [query engine](../prisma-engines/query-engine/) for all connectors.
+- Represent `DEFAULT` values in the underlying database (relational databases only) _or_
+- Use a Prisma-level function. For example, `cuid()` and `uuid()` are provided by Prisma's [query engine](../prisma-engines/query-engine/) for all connectors.
 
 Default values can be:
 
@@ -825,6 +809,12 @@ Default values can be:
 Refer to the [attribute function reference documentation](../../../reference/api-reference/prisma-schema-reference#attribute-functions) <span class="api"></span> for information about connector support for functions.
 
 </Admonition>
+
+You can also add [`@updatedAt`](../../../reference/api-reference/prisma-schema-reference#now) to `DateTime` fields - if you do not manually set the field when changing a record, Prisma Client updates the value for you by default:
+
+```prisma
+lastUpdated   DateTime   @updatedAt
+```
 
 ### Defining a unique field
 
@@ -897,6 +887,13 @@ model Post {
 </tab>
 </TabbedContent>
 
+<Admonition type="info">
+
+**Constraint names in relational databases** <br />
+You can optionally define a [custom unique constraint name](names-in-underlying-database#constraint-and-index-names-preview) in the underlying database.
+
+</Admonition>
+
 ### Defining an index
 
 You can define indexes on one or multiple fields of your models via the [`@@index`](../../../reference/api-reference/prisma-schema-reference#index-2) <span class="api"></span> on a model. The following example defines a multi-column index based on the `title` and `content` field:
@@ -910,20 +907,16 @@ model Post {
 }
 ```
 
-#### Index names
+<Admonition type="info">
 
-You can specify your own index `name` if you prefer a particular convention:
+**Index names in relational databases** <br />
+You can optionally define a [custom index name](names-in-underlying-database#constraint-and-index-names-preview) in the underlying database.
 
-```prisma
-model Post {
-  id       Int     @id @default(autoincrement())
-  title    String
-  content  String?
-|  @@index(fields: [title, content], name: "main_index")
-}
-```
+</Admonition>
 
-If you do not specify an index name, introspection generates [a name based on Prisma's naming convention for indexes (see `name`)](../../../reference/api-reference/prisma-schema-reference#arguments-5).
+## Defining relations
+
+Refer to the [relations documentation](relations) for more examples and information about relationships between models.
 
 ## Defining enums
 
@@ -970,6 +963,12 @@ model User {
 </tab>
 </TabbedContent>
 
+<Admonition type="info">
+
+**Enums in the underlying database** <br />
+You can optionally [map Prisma enums and enum values to different names](names-in-underlying-database#mapping-collectiontable-and-fieldcolumn-names) in the underlying database.
+
+</Admonition>
 
 
 ## Using functions
@@ -1008,10 +1007,6 @@ model Post {
 Support for [`autoincrement()`](../../../reference/api-reference/prisma-schema-reference#autoincrement) <span class="api"></span>, [`now()`](../../../reference/api-reference/prisma-schema-reference#now) <span class="api"></span>) and [`dbgenerated()`](../../../reference/api-reference/prisma-schema-reference#dbgenerated) <span class="api"></span> differ between databases.
 
 **Relational database connectors** implement `autoincrement()`, `dbgenerated()`, and `now()` at database level. The **MongoDB connector** does not support `autoincrement()`, and `now()` is implemented at Prisma level. `dbgenerated()` can only be used to generate an `ObjectId`.
-
-## Relations
-
-Refer to the [relations documentation](relations) for more examples and information about relationships between models.
 
 ## Models in Prisma Client
 

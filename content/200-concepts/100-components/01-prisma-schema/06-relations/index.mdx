@@ -1,6 +1,6 @@
 ---
 title: 'Relations'
-metaTitle: 'Relations (Reference)'
+metaTitle: 'Relations (Concept)'
 metaDescription: 'A relation is a connection between two models in the Prisma schema. This page explains how you can define 1-1, 1-n and m-n relations in Prisma.'
 tocDepth: 2
 ---
@@ -285,13 +285,11 @@ model Category {
 </tab>
 </TabbedContent>
 
-> **Note**: This schema is the same as the [example data model](../data-model) but has all [scalar fields](../data-model#scalar-fields) removed (except for the required [relation scalars](../relations#annotated-relation-fields-and-relation-scalar-fields)) so you can focus on the [relation fields](#relation-fields).
 > **Note**: Implicit many-to-many relations do **not** require the `@relation` attribute unless you need to [disambiguate relations](#disambiguating-relations) (this is not specific to implicit n-m relations).
 
 Implicit many-to-many relations require both models to have a single `@id`. Be aware that:
 
 - You cannot use a [multi-field ID](../../../../reference/api-reference/prisma-schema-reference#id-1)
-
 - You cannot use a `@unique` in place of an `@id`
 
 To use either of these features, you must set up an explicit many-to-many instead.
@@ -475,7 +473,14 @@ The `@relation` attribute is required when:
 - you define [an m-n for MongoDB](many-to-many-relations#mongodb)
 - you need to control how the relation table is represented in the underlying database (e.g. use a specific name for a relation table)
 
-> **Note**: [Implicit m-n relations](many-to-many-relations#implicit-many-to-many-relations) in relational databases do not require the `@relation` attribute.
+[Implicit m-n relations](many-to-many-relations#implicit-many-to-many-relations) in relational databases do not require the `@relation` attribute.
+
+<Admonition type="info">
+
+**Constraint names in relational databases** <br />
+You can optionally define a [custom foreign key constraint name](../names-in-underlying-database#constraint-and-index-names-preview) in the underlying database.
+
+</Admonition>
 
 
 ## Disambiguating relations

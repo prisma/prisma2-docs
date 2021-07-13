@@ -1,0 +1,190 @@
+---
+title: Upgrading to 2.XX.0
+metaDescription: "Manual steps when upgrading to 2.XX.0."
+tocDepth: 2
+---
+
+<TopBlock>
+
+This page describes manual upgrade steps that you need to perform after [upgrading to Prisma 2.XX.0](.) if you want to use the `namedConstraints` Preview feature.
+
+</TopBlock>
+
+## Optional: Enable the <inlinecode>namedConstraints</inlinecode> Preview feature
+
+If you choose to enable the `namedConstraints` Preview feature, choose a workflow (Prisma Migrate or Introspection) and upgrade path that suits your requirements:
+
+### Upgrade paths for Prisma Migrate users
+
+Use the following guide if your project uses Prisma Migrate. Choose the upgrade path that matches your requirements:
+
+* [I want to maintain my existing constraint and index names](#upgrade-path-1-i-want-to-maintain-my-existing-constraint-and-index-names)
+* [I want to use Prisma's default constraint and index names](#upgrade-path-2-i-want-to-use-prismas-default-constraint-and-index-names)
+
+#### Upgrade path 1: I want to maintain my existing constraint and index names
+
+1. Enable the `namedConstraints` Preview:
+
+    ```prisma highlight=3;normal
+    generator client {
+      provider        = "prisma-client-js"
+      previewFeatures = ["namedConstraints"]
+    }
+
+    datasource db {
+      provider = "postgresql"
+      url      = env("DATABASE_URL")
+    }
+
+    model User {
+      id    Int    @id() @default(autoincrement())
+      name  String @unique
+      posts Post[]
+    }
+
+    model Post {
+      id          Int     @id @default(autoincrement())
+      title       String
+      authorName  String  @default("Anonymous")
+      author      User?   @relation(fields: [authorName], references: [name])
+    }
+    ```
+   
+1. Introspect your **development database** to populate the Prisma schema with constraint and index names in your underlying database _that do not match Prisma's naming convention_:
+
+   ```terminal
+   npx prisma migrate introspect
+   ```
+
+   In this example, the highlighted constraints did not conform to Prisma's default naming convention and now include the `map` attribute field:
+
+   ```prisma highlight=11;normal
+   model User {
+     id    Int    @id(map: "Custom_Constraint_Name") @default(autoincrement())
+     name  String @unique
+     posts Post[]
+   }
+
+   model Post {
+     id    Int @id @default(autoincrement())
+     title String
+     authorName String @default("Anonymous")
+     author User? @relation(fields: [authorName], references: [name], map: "Custom_Foreign_Key_Constraint")
+   }
+   ```
+
+1. Optionally introspect your **production database** and double-check that constraint names in production and development are in sync. If you have external applications or scripts that rely on a specific constraint name in production, make sure that these constraint names are represented in the Prisma schema.
+
+    In the following example, the `Post` model has a foreign key constraint with a custom name in production that does not match development:
+
+   <TabbedContent tabs={[<FileWithIcon text="Development environment" icon="prisma"/>, <FileWithIcon text="Production environment" icon="prisma"/>]}>
+   <tab>
+
+    ```prisma highlight=5;normal
+    model Post {
+      id    Int @id @default(autoincrement())
+      title String
+      authorName String @default("Anonymous")
+      author User? @relation(fields: [authorName], references: [name], map: "Custom_Foreign_Key_Constraint")
+   } 
+   ```
+
+   </tab>
+   <tab>
+
+    ```prisma highlight=5;normal
+    model Post {
+      id    Int @id @default(autoincrement())
+      title String
+      authorName String @default("Anonymous")
+      author User? @relation(fields: [authorName], references: [name], map: "Custom_Production_Name")
+   } 
+   ```
+
+   </tab>
+   </TabbedContent>
+   
+   To synchronize constraint names between development and production, make sure that the constraint name in your Prisma schema is `map: "Custom_Production_Name"`.
+
+1. Optionally rename any explicitly defined constraint names where you do not want to use Prisma's naming convention, but do want to use a different constraint name:
+
+   ```prisma highlight=2;delete|3;add
+   model User {
+     id    Int    @id(map: "Custom_Constraint_Name") @default(autoincrement())       
+     id    Int    @id(map: "User_ID_Primary_Key") @default(autoincrement())
+     name  String @unique
+     posts Post[]
+   }
+   ```
+
+1. Optionally _remove_ the `map` field from any constraint or index attribute where you want to use the Prisma default:
+   
+   ```prisma highlight=5;delete|6;add
+   model Post {
+     id    Int @id @default(autoincrement())
+     title String
+     authorName String @default("Anonymous")
+     author User? @relation(fields: [authorName], references: [name], map: "Custom_Foreign_Key_Constraint")
+     author User? @relation(fields: [authorName], references: [name])
+   }
+   ```
+
+1. Run the `prisma migrate dev` command to apply the changes to the database and generate a new migration:
+
+   ```terminal
+   npx prisma migrate dev
+   ```
+
+1. Deploy the migration to production and test environments.
+
+   ```terminal
+   npx prisma migrate deploy
+   ```
+
+#### Upgrade path 2: I want to use Prisma's default constraint and index namess
+
+1. Enable the `namedConstraints` Preview:
+
+    ```prisma highlight=3;normal
+    generator client {
+      provider        = "prisma-client-js"
+      previewFeatures = ["namedConstraints"]
+    }s
+    ```
+
+1. Run the `prisma migrate dev` command to generate a new migration:
+
+   ```terminal
+   npx prisma migrate dev
+   ```
+
+   This migration renames any constraints that do not currently follow Prisma's naming convention.
+
+### Upgrade path for introspection only users
+
+Use the following guide if you use introspection only.
+
+1. Enable the `namedConstraints` Preview:
+
+    ```prisma highlight=3;normal
+    generator client {
+      provider        = "prisma-client-js"
+      previewFeatures = ["namedConstraints"]
+    }
+    ```
+
+1. Introspect to populate your Prisma schema with any constraint names that do not follow Prisma's naming convention:
+
+   ```terminal
+   npx prisma introspect
+   ```
+
+   For example, in the following model, the `@id` primary key constraint does not follow Prisma's convention (the conventional name would be `User_id_pk`):
+
+   ```prisma
+   model User {
+     id    Int    @id(map: "user_id_primary_key") @default(autoincrement())
+     name  String @unique
+     posts Post[]
+   }
+   ```

@@ -10,7 +10,7 @@ The Prisma Client API is generated based on the models in your [Prisma schema](.
 
 In some cases, especially when using [introspection](../../introspection), it might be useful to _decouple_ the naming of database tables and columns from the names that are used in your Prisma Client API. This can be done via the [`@map` and `@@map`](../../prisma-schema/data-model#mapping-model-names-to-tables-or-collections) attributes in your Prisma schema.
 
-You can use `@map` and `@@map` to rename MongoDB fields and collections respectively. This page uses a relational database example.
+You can use `@map` and `@@map` to rename MongoDB fields and collections respectively. This page uses a relational database as an example.
 
 </TopBlock>
 
@@ -186,7 +186,7 @@ In both cases, `user_id` is used to refer to an _entire_ "user object", not only
 
 ## Using `@map` and `@@map` to rename fields and models in the Prisma Client API
 
-You can "rename" fields and models that are used in the Prisma Client by mapping them to the "original" names in the database using the `@map` and `@@map` attributes. For the [example](#example) above, you could e.g. annotate your models as follows to prevent the mentioned issues.
+You can "rename" fields and models that are used in the Prisma Client by mapping them to the "original" names in the database using the `@map` and `@@map` attributes. For the [example](#example-relational-database) above, you could e.g. annotate your models as follows to prevent the mentioned issues.
 
 _After_ you introspected your database with `prisma introspect`, you can manually adjust the resulting Prisma schema as follows:
 
