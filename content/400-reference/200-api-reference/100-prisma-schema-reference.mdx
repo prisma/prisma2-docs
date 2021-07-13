@@ -978,7 +978,7 @@ Attributes modify the behavior of a [field](#model-fields) or block (e.g. [model
 - _Field_ attributes are prefixed with `@`
 - _Block_ attributes are prefixed with `@@`
 
-Some attributes take arguments. Arguments in attributes are always named, but in most cases the argument _name_ can be omitted.
+Some attributes take arguments. Arguments in attributes are always named, but in some cases one of the argument's _name_ can be omitted.
 
 > **Note**: The leading underscore in a signature means the _argument name_ can be omitted.
 
@@ -1039,7 +1039,7 @@ Defines a single-field ID on the model.
 #### Signature
 
 ```prisma no-lines
-@id(_ map: String)
+@id(map: String)
 ```
 
 #### Examples
@@ -1804,7 +1804,7 @@ Defines a unique constraint for this field.
 #### Signature
 
 ```ts no-lines
-@unique(_ map: String?)
+@unique(map: String?)
 ```
 
 #### Examples
