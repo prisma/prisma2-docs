@@ -141,7 +141,7 @@ The corresponding database looks like this:
 
 </details>
 
-The following query uses the Prisma Client generated from this model to create:
+The following query uses the Prisma Client generated from this data model to create:
 
 - A `User` record
 - Two nested `Post` records
@@ -263,8 +263,8 @@ You cannot currently use Prisma Migrate or Introspection with the MongoDB connec
 
 There are two ways to define a data model:
 
-- **Write the model manually and use Prisma Migrate**: You can write your data model manually and map it to your database using [Prisma Migrate](../prisma-migrate). In this case, the data model is the single source of truth for the models of your application.
-- **Generate the model via introspection**: When you have an existing database or prefer migrating your database schema with SQL, you generate the data model by [introspecting](../introspection) your database. In this case, the database schema is the single source of truth for the models of your application.
+- **Write the data model manually and use Prisma Migrate**: You can write your data model manually and map it to your database using [Prisma Migrate](../prisma-migrate). In this case, the data model is the single source of truth for the models of your application.
+- **Generate the data model via introspection**: When you have an existing database or prefer migrating your database schema with SQL, you generate the data model by [introspecting](../introspection) your database. In this case, the database schema is the single source of truth for the models of your application.
 
 ## Defining models
 
