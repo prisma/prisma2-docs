@@ -9,7 +9,135 @@ Modelling your schema can sometimes offer up some unexpected results. This secti
 
 </TopBlock>
 
-### How to use a relation table with a many-to-many relationship
+## Implicit many-to-many self-relations return incorrect data if order of relation fields change
+
+### Problem
+
+In the following implicit many-to-many self-relation, the lexographic order of relation fields in `a_eats` (1) and `b_eatenBy` (2):
+
+```prisma highlight=4,5;normal
+model Animal {
+  id        Int   @id @default(autoincrement())
+  name      String
+  a_eats    Animal[] @relation(name: "FoodChain")
+  b_eatenBy Animal[] @relation(name: "FoodChain")
+}
+```
+
+The resulting relation table in SQL looks as follows, where `A` represents prey (`a_eats`) and `B` represents predators (`a_eatenBy`):
+
+| A            | B          |
+| :----------- | :--------- |
+| 8 (Plankton) | 7 (Salmon) |
+| 7 (Salmon)   | 9 (Bear)   |
+
+The following query returns a salmon's prey and predators:
+
+<CodeWithResult expanded="{true}">
+<cmd>
+
+```ts
+const getAnimals = await prisma.animal.findMany({
+  where: {
+    name: 'Salmon',
+  },
+  include: {
+    b_eats: true,
+    a_eatenBy: true,
+  },
+})
+```
+
+</cmd>
+<cmdResult>
+
+```js
+{
+      "id": 7,
+      "name": "Salmon",
+      "b_eats": [
+         {
+            "id": 8,
+            "name": "Plankton"
+         }
+      ],
+      "a_eatenBy": [
+         {
+            "id": 9,
+            "name": "Bear"
+         }
+      ]
+   }
+```
+
+</cmdResult>
+</CodeWithResult>
+
+Now change the order of the relation fields:
+
+```prisma highlight=4,5;normal
+model Animal {
+  id        Int   @id @default(autoincrement())
+  name      String
+  b_eats    Animal[] @relation(name: "FoodChain")
+  a_eatenBy Animal[] @relation(name: "FoodChain")
+}
+```
+
+Migrate your changes and re-generate the client. When you run the same query with the updated field names, Prisma Client returns incorrect data (salmon now eats bears and gets eaten by plankton):
+
+<CodeWithResult expanded="{true}">
+<cmd>
+
+```ts
+const getAnimals = await prisma.animal.findMany({
+  where: {
+    name: 'Salmon',
+  },
+  include: {
+    b_eats: true,
+    a_eatenBy: true,
+  },
+})
+```
+
+</cmd>
+<cmdResult>
+
+```js
+{
+  "id": 1,
+  "name": "Salmon",
+  "b_eats": [
+      {
+        "id": 3,
+        "name": "Bear"
+      }
+  ],
+  "a_eatenBy": [
+      {
+        "id": 2,
+        "name": "Plankton"
+      }
+  ]
+}
+```
+
+</cmdResult>
+</CodeWithResult>
+
+Although the lexographic order of the relation fields in the Prisma schema changed, columns `A` and `B` in the database **did not change** (they were not renamed and data was not moved). Therefore, `A` now represents predators (`a_eatenBy`) and `B` represents prey (`b_eats`):
+
+| A            | B          |
+| :----------- | :--------- |
+| 8 (Plankton) | 7 (Salmon) |
+| 7 (Salmon)   | 9 (Bear)   |
+
+### Solution
+
+If you rename relation fields in an implicit many-to-many self-relations, make sure that you maintain the alphabetic order of the fields - for example, by prefixing with `a_` and `_b`.
+
+## How to use a relation table with a many-to-many relationship
 
 There are a couple of ways to define a m-n relationship, implicitly or explicity. Implicitly means letting Prisma handle the relation table (JOIN table) under the hood, all you have to do is define an array/list for the non scalar types on each model, see [implicit many-to-many relations](many-to-many-relations#implicit-many-to-many-relations).
 
@@ -72,7 +200,7 @@ model Category {
 }
 ```
 
-### Using the <inlinecode>@relation</inlinecode> attribute with a many-to-many relationship
+## Using the <inlinecode>@relation</inlinecode> attribute with a many-to-many relationship
 
 It might seem logical to add a `@relation("Post")` annotation to a relation field on your model when composing an implicit many-to-many relationship.
 
