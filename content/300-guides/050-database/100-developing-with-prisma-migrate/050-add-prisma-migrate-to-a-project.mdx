@@ -68,7 +68,7 @@ To include [unsupported database features](include-unsupported-database-features
     WHERE success;
    ```
 
-   - If the changes are significant, it can be easier to replace the entire migration file with the result of a database dump ([`mysqldump`](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html), [`pg_dump`](https://www.postgresql.org/docs/12/app-pgdump.html))
+   - If the changes are significant, it can be easier to replace the entire migration file with the result of a database dump ([`mysqldump`](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html), [`pg_dump`](https://www.postgresql.org/docs/12/app-pgdump.html)) (Note that order of tables matters when creating all of them at once, since foreign keys are created at the same step. So eitehr re-order them or move constraints creation as a last step after all tables are created, so you won't face `can't create constraint` errors)
 
 ### Apply the initial migrations
 
