@@ -84,7 +84,7 @@ Learn more in the [Debugging](../prisma-client/debugging) and [Logging](../prism
 
 Node-API is available in [2.20.0](https://github.com/prisma/prisma/releases/2.20.0) and later. It is a new technique for binding Prisma's Rust-based query engine directly to Prisma Client. This reduces the communication overhead between the Node.js and Rust layers when resolving Prisma Client's database queries.
 
-To enable this feature, add `nApi` to `previewFeatures` in your schema:
+To enable this feature, add `nApi` to `previewFeatures` in your schema and then run `prisma generate`:
 
 ```prisma
 generator client {
