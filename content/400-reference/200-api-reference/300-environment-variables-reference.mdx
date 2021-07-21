@@ -124,6 +124,8 @@ PRISMA_MIGRATION_ENGINE_BINARY=custom/my-migration-engine-unix
 PRISMA_QUERY_ENGINE_BINARY=custom/my-query-engine-unix
 ```
 
+If you do so, Prisma CLI does not download the normal engine binary and uses the path of the environment variable instead, and when generating Prisma Client the file under that path is copied to the Prisma Client.
+
 ### <inlinecode>PRISMA_INTROSPECTION_ENGINE_BINARY</inlinecode>
 
 `PRISMA_INTROSPECTION_ENGINE_BINARY` is used to set a custom location for your own introspection engine binary.
