@@ -280,7 +280,7 @@ The `generate` command is most often used to generate Prisma Client with the `pr
 
 1. Searches the current directory and parent directories to find the applicable `npm` project. It will create a `package.json` file in the current directory if it cannot find one.
 2. Installs the `@prisma/client` into the `npm` project if it is not already present.
-3. Inspects the current directory to find a Prisma schema file to process. It will then generate a customized [Prisma Client](https://github.com/prisma/prisma-client-js) for your project.
+3. Inspects the current directory to find a Prisma schema file to process. It will then generate a customized [Prisma Client](https://github.com/prisma/prisma-client-js) for your project. See "Schema File Resolution" section below for how a schema file is identified.
 
 #### Prerequisites
 
@@ -303,6 +303,16 @@ generator client {
 | Argument   | Required | Description                                                                                                                                         | Default                                     |
 | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
 | `--schema` | No       | Specifies the path to the desired `schema.prisma` file to be processed instead of the default path. Both absolute and relative paths are supported. | `./schema.prisma`, `./prisma/schema.prisma` |
+
+#### Schema File Resolution
+
+The CLI will try the following strategies to identify a schema file and use the first one that is successful:
+
+1. If a `--schema` argument is provided to the `generate` command, that path is expected to resolve to a schema file
+2. If present, the `prisma.schema` key of `package.json` will be interpreted as a path relative to the current working directory, and the file at that path will be used as the schema file
+3. The paths `./schema.prisma` and `./prisma/schema.prisma` are examined in that order and if a file exists, it is used as the schema file
+4. If yarn is used, steps 2 and 3 are applied for each workspace
+
 
 #### Examples
 
