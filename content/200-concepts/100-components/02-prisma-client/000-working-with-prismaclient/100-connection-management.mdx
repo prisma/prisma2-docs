@@ -84,16 +84,17 @@ If the above script runs multiple times in the context of a long-running applica
 
 ## Exit hooks
 
-The `beforeExit` hook runs _before_ Prisma ends its child processes and allows you to issue queries before the client disconnects - for example, as part of a graceful shutdown of a service:
+The `beforeExit` hook runs when Prisma is triggered externally (e.g. via a `SIGINT` signal) to shut down and allows you run code _before_ the Client disconnects - for example, to issue queries as part of a graceful shutdown of a service:
 
 ```ts
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 prisma.$on('beforeExit', async () => {
+    console.log("beforeExit hook")
     // PrismaClient still available
     await prisma.message.create({
       data: {
-        message: "Shutting down server";
+        message: "Shutting down server"
       }
     })
 })
