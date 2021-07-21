@@ -12,11 +12,11 @@ This page explains the release process of Prisma, how it's versioned and how to 
 
 ## Releases
 
-Prisma releases typically happen every two weeks. Note that this is _not_ a hard rule, releases might be postponed for internal reasons.
+Prisma releases typically happen every two weeks. Note that this is _not_ a hard rule – releases might be postponed for internal reasons.
 
 ## Product maturity levels
 
-A release can include products or features at different maturity levels. Maturity level describes a product or feature's completeness, and what users can expect in terms of breaking changes.
+A release can include products or features at different maturity levels. Maturity level describes a product or feature's completeness and what users can expect in terms of breaking changes.
 
 > **Note**: As of version [2.13.0](https://github.com/prisma/prisma/releases/2.13.0), 'Experimental' is no longer part of the product maturity scale.
 
@@ -24,23 +24,23 @@ A release can include products or features at different maturity levels. Maturit
 
 If a feature or product is **Early Access**:
 
-- We have validated a problem and are considering a solution to it, but are not certain whether that solution is complete or a perfect fit.
+- We have validated a problem and are considering a solution to it but are not certain whether that solution is complete or a perfect fit.
 - We want to gather more feedback and adjust the solution as necessary, knowing that users are prepared for significant breaking changes
 
-Not recommended for production.
+We don't recommend using Early Access features or products in production.
 
 ### Preview
 
 If a feature or product is a **Preview**:
 
 - We have validated the feature or product in terms of direction and surface.
-- Users can count on the feature or product and associated API to be mostly stable, unless stated otherwise in the release notes and documentation.
-- There are no significant known issues, although smaller bugs may exist.
+- Users can count on the feature or product and associated API to be mostly stable unless stated otherwise in the release notes and documentation.
+- There are no significant known issues, although minor bugs may exist.
 - We welcome feedback on these to make the solution stable as quickly as possible.
 
 Previews are typically available behind a feature flag or require some form of opt-in (for example, by providing a `--preview-feature` flag in the CLI or [adding them to a `previewFeatures` property in the `generator` block](../../concepts/components/preview-features/cli-preview-features/) for Prisma Client in your Prisma schema).
 
-Not recommended for production.
+We don't recommend using Preview features or products in production.
 
 See also: [All currently available Preview features](../../concepts/components/preview-features).
 
@@ -53,9 +53,9 @@ If a feature or product is **Generally Available**:
 
 ## Versioning
 
-Prisma's approach for versioning is inspired by Semantic Versioning ([SemVer](https://semver.org/)) but doesn't fully adhere to it.
+Prisma's approach for versioning adheres to Semantic Versioning ([SemVer](https://semver.org/)) starting with `3.0.0`.
 
-### Prisma vs SemVer
+### Prisma and Semantic Versioning (SemVer)
 
 #### How does SemVer versioning work?
 
@@ -64,21 +64,24 @@ Semantic Versioning (SemVer) uses the following rules for version upgrade (quote
 _Given a version number `MAJOR.MINOR.PATCH`, increment the:_
 
 1. _`MAJOR` version when you make incompatible API changes,_
-1. _`MINOR` version when you add functionality in a backwards compatible manner, and_
-1. _`PATCH` version when you make backwards compatible bug fixes._
+1. _`MINOR` version when you add functionality in a backward compatible manner, and_
+1. _`PATCH` version when you make backward compatible bug fixes._
 
-_Additional labels for pre-release and build metadata are available as extensions to the `MAJOR.MINOR.PATCH` format._
 
-#### How does Prisma versioning work?
+#### How does Prisma versioning follow SemVer?
 
-While Prisma releases follow the _format_ of the [Semantic Versioning](https://semver.org/) (SemVer) specification, it does **not** follow the rule that `MINOR` version updates must not have incompatible API changes (i.e. _breaking changes_). This means that there _might_ be breaking changes in any `2.X` release.
+Beginning with version `3.0.0`, Prisma adheres strictly to the [SemVer](https://semver.org/) versioning scheme.
+
+Here is a brief overview of how Prisma's follows SemVer:
+
+- Breaking changes in stable surface (i.e. [General Availability](https://www.prisma.io/docs/about/releases#generally-available-ga)) will only be introduced in new `MAJOR` releases.
+- Breaking changes can still be rolled out in `MINOR` but only for opt-in Preview and Early Access features that are not active by default (e.g. via a Preview feature flag or a specific opt-in option or new CLI command).
+- Opt-in breaking changes, i.e. Preview and Early Access, released in `MINOR`, will only be promoted to General Availability (no requirement for opt-in) in new `MAJOR` releases.
 
 Given a version number `MAJOR.MINOR.PATCH`, Prisma's version number is incremented as follows:
 
-1. `MAJOR` version is incremented when major product updates (**likely with breaking changes**) are released,
-1. `MINOR` version is incremented for minor product updates (**may have breaking API changes**) are released, and
-1. `PATCH` version functionality is added or bugs are fixed (**backwards compatible**).
+1. `MAJOR` version is incremented when major product updates **with breaking changes** are released to General Availability.
+1. `MINOR` version is incremented when product updates adding backward compatible new functionality are released. Features with breaking changes may only be introduced if they are **opt-in**, i.e. Early Access and Preview.
+1. `PATCH` version is incremented when functionality bugs are fixed and are always **backward compatible**.
 
-#### Why does Prisma not follow SemVer?
-
-Prisma is one of many developer tools that doesn't follow the SemVer specification. The main reason is that Prisma has a huge developer surface made up by several tools (the Prisma CLI, Prisma Client, Prisma Migrate, Prisma Studio, ...). Therefore, a breaking change in one tool might not affect usage of another tool, so incrementing the major version number for the tools that are not affected might not be justified.
+> **Note:** Up until version version `2.27.0`, Prisma did not follow SemVer versioning strictly. This means that releases in the `2.MINOR.PATCH` range, `MINOR` versions may have included breaking changes. To learn more about Prisma's adoption of SemVer, check out the [blog post](https://www.prisma.io/blog/prisma-adopts-semver-strictly).
