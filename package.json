@@ -101,7 +101,7 @@
     "@types/react-sticky-el": "^1.0.2",
     "gatsby-remark-sectionize": "1.0.0",
     "husky": "7.0.1",
-    "jest": "27.0.3",
+    "jest": "27.0.6",
     "jest-dom": "4.0.0",
     "lint-staged": "^11.0.0",
     "loader-utils": "2.0.0",
