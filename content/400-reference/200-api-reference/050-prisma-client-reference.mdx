@@ -4714,27 +4714,7 @@ $connect(): Promise<void>
 <!-- prettier-ignore -->
 ### <inlinecode>$on()</inlinecode>
 
-The `$on()` method allows you to subscribe to events.
-
-#### Hooks
-
-| Hook         | Decription                                                                                                                       |
-| :----------- | :------------------------------------------------------------------------------------------------------------------------------- |
-| `beforeExit` | Runs before the Prisma process exits and allows you to perform additional queries - for example, as part of a graceful shutdown. |
-
-You can also subscribe to [logging events](#log).
-
-#### Examples
-
-##### Using the `beforeExit` hook
-
-```ts
-const prisma = new PrismaClient()
-
-prisma.$on('beforeExit', () => {
-  await prisma.user.deleteMany() // Delete all users
-})
-```
+The `$on()` method allows you to subscribe to events. With those you can subscribe to [logging events](#log) or the [exit hook](../../../concepts/components/prisma-client/working-with-prismaclient/connection-management#exit-hooks).
 
 <!-- prettier-ignore -->
 ### <inlinecode>$use()</inlinecode>
