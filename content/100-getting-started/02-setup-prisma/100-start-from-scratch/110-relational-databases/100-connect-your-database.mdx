@@ -22,7 +22,7 @@ datasource db {
 
 In this case, the `url` is [set via an environment variable](../../../../concepts/more/environment-variables) which is defined in `.env`:
 
-```js file=.env
+```bash file=.env
 DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
 ```
 
@@ -46,13 +46,13 @@ If you're unsure what to provide for the `schema` parameter for a PostgreSQL con
 
 As an example, for a PostgreSQL database hosted on Heroku, the [connection URL](../../../../reference/database-reference/connection-urls) might look similar to this:
 
-```js file=.env
+```bash file=.env
 DATABASE_URL="postgresql://opnmyfngbknppm:XXX@ec2-46-137-91-216.eu-west-1.compute.amazonaws.com:5432/d50rgmkqi2ipus?schema=hello-prisma"
 ```
 
 When running PostgreSQL locally on Mac OS, your user and password as well as the database name _typically_ correspond to the current _user_ of your OS, e.g. assuming the user is called `janedoe`:
 
-```js file=.env
+```bash file=.env
 DATABASE_URL="postgresql://janedoe:janedoe@localhost:5432/janedoe?schema=hello-prisma"
 ```
 
@@ -78,7 +78,7 @@ datasource db {
 
 In this case, the `url` is [set via an environment variable](../../../../concepts/components/prisma-schema#accessing-environment-variables-from-the-schema) which is defined in `.env`:
 
-```js file=.env
+```bash file=.env
 DATABASE_URL="mysql://johndoe:randompassword@localhost:3306/mydb"
 ```
 
@@ -99,13 +99,13 @@ Here's a short explanation of each component:
 
 As an example, for a MySQL database hosted on AWS RDS, the [connection URL](../../../../reference/database-reference/connection-urls) might look similar to this:
 
-```js file=.env
+```bash file=.env
 DATABASE_URL="mysql://johndoe:XXX@mysql–instance1.123456789012.us-east-1.rds.amazonaws.com:3306/mydb"
 ```
 
 When running MySQL locally, your connection URL typically looks similar to this:
 
-```js file=.env
+```bash file=.env
 DATABASE_URL="mysql://root:randompassword@localhost:3306/mydb"
 ```
 
@@ -115,12 +115,22 @@ DATABASE_URL="mysql://root:randompassword@localhost:3306/mydb"
 
 <NavigationLinksContainer>
 
-<ButtonLink color="dark" type="primary" href="/getting-started/setup-prisma/start-from-scratch/relational-databases-node-postgres" arrowLeft>
-    Installation
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="/getting-started/setup-prisma/start-from-scratch/relational-databases-node-postgres"
+  arrowLeft
+>
+  Installation
 </ButtonLink>
 
-<ButtonLink color="dark" type="primary" href="./using-prisma-migrate-node-postgres" arrow>
-    Using Prisma Migrate
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="./using-prisma-migrate-node-postgres"
+  arrow
+>
+  Using Prisma Migrate
 </ButtonLink>
 
 </NavigationLinksContainer>
@@ -131,12 +141,22 @@ DATABASE_URL="mysql://root:randompassword@localhost:3306/mydb"
 
 <NavigationLinksContainer>
 
-<ButtonLink color="dark" type="primary" href="/getting-started/setup-prisma/start-from-scratch/relational-databases-node-mysql" arrowRight>
-    Installation
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="/getting-started/setup-prisma/start-from-scratch/relational-databases-node-mysql"
+  arrowRight
+>
+  Installation
 </ButtonLink>
 
-<ButtonLink color="dark" type="primary" href="./using-prisma-migrate-node-mysql" arrow>
-    Using Prisma Migrate
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="./using-prisma-migrate-node-mysql"
+  arrow
+>
+  Using Prisma Migrate
 </ButtonLink>
 
 </NavigationLinksContainer>
@@ -147,12 +167,22 @@ DATABASE_URL="mysql://root:randompassword@localhost:3306/mydb"
 
 <NavigationLinksContainer>
 
-<ButtonLink color="dark" type="primary" href="/getting-started/setup-prisma/start-from-scratch/relational-databases-typescript-postgres" arrowLeft>
-    Installation
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="/getting-started/setup-prisma/start-from-scratch/relational-databases-typescript-postgres"
+  arrowLeft
+>
+  Installation
 </ButtonLink>
 
-<ButtonLink color="dark" type="primary" href="./using-prisma-migrate-typescript-postgres" arrow>
-    Using Prisma Migrate
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="./using-prisma-migrate-typescript-postgres"
+  arrow
+>
+  Using Prisma Migrate
 </ButtonLink>
 
 </NavigationLinksContainer>
@@ -163,12 +193,22 @@ DATABASE_URL="mysql://root:randompassword@localhost:3306/mydb"
 
 <NavigationLinksContainer>
 
-<ButtonLink color="dark" type="primary" href="/getting-started/setup-prisma/start-from-scratch-typescript-mysql" arrowRight>
-    Installation
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="/getting-started/setup-prisma/start-from-scratch-typescript-mysql"
+  arrowRight
+>
+  Installation
 </ButtonLink>
 
-<ButtonLink color="dark" type="primary" href="./using-prisma-migrate-typescript-mysql" arrow>
-    Using Prisma Migrate
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="./using-prisma-migrate-typescript-mysql"
+  arrow
+>
+  Using Prisma Migrate
 </ButtonLink>
 
 </NavigationLinksContainer>

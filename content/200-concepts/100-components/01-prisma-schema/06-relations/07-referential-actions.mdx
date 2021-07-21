@@ -222,7 +222,15 @@ If a `User` record is deleted, then their posts are deleted too. If the user's `
 ##### How to use cascading deletes
 
 <div class="videoWrapper">
-<iframe width="560" height="315" src="https://www.youtube.com/embed/-Nv3wSm0Ac0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <iframe
+    width="560"
+    height="315"
+    src="https://www.youtube.com/embed/-Nv3wSm0Ac0"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+  ></iframe>
 </div>
 
 ### <inlinecode>Restrict</inlinecode>
@@ -447,8 +455,8 @@ async function main() {
   try {
     await prisma.user.delete({
       where: {
-        id: 'some-long-id'
-      }
+        id: 'some-long-id',
+      },
     })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -460,7 +468,7 @@ async function main() {
 }
 
 main()
-  .catch(e => {
+  .catch((e) => {
     throw e
   })
   .finally(async () => {

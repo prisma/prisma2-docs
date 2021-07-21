@@ -376,9 +376,9 @@ const Category = objectType({
 
 Be sure to include all newly defined types in the `types` option that's provided to `makeSchema`:
 
-```ts line-number
+```ts line-number highlight=2;normal
 export const schema = makeSchema({
-|types: [Query, User, Post, Profile, Category],
+  types: [Query, User, Post, Profile, Category],
   plugins: [nexusSchemaPrisma()],
   outputs: {
     schema: __dirname + '/../schema.graphql',
@@ -472,7 +472,7 @@ const Query = queryType({
       filtering: true,
       ordering: true,
     })
-  }
+  },
 })
 ```
 
@@ -531,7 +531,10 @@ const resolvers = {
       return context.prisma.query.posts(
         {
           where: {
-            OR: [{ title_contains: args.searchString }, { content_contains: args.searchString }],
+            OR: [
+              { title_contains: args.searchString },
+              { content_contains: args.searchString },
+            ],
           },
         },
         info
@@ -554,9 +557,9 @@ const Query = queryType({
     t.list.field('posts', {
       type: 'Post',
       nullable: false,
-      args: { searchString: stringArg() }
+      args: { searchString: stringArg() },
     })
-  }
+  },
 })
 ```
 
@@ -575,7 +578,7 @@ However, the code is missing the actual resolver logic. This is what you're goin
 
 You can add the resolver with Nexus as follows:
 
-```ts line-number highlight=9-19;add
+```ts line-number highlight=9-21;add
 const Query = queryType({
   definition(t) {
     // ... previous queries
@@ -587,16 +590,19 @@ const Query = queryType({
       resolve: (_, args, context) => {
         return context.prisma.post.findMany({
           where: {
-            OR: [{
-              title: { contains: args.searchString }
-            }, {
-              content: { contains: args.searchString }
-            }]
-          }
+            OR: [
+              {
+                title: { contains: args.searchString },
+              },
+              {
+                content: { contains: args.searchString },
+              },
+            ],
+          },
         })
-      }
+      },
     })
-  }
+  },
 })
 ```
 
@@ -658,7 +664,7 @@ const resolvers = {
 To get the same behavior with Nexus, you'll need to add a `t.field` definition to the `queryType` and define an `inputObjectType` that includes the two `@unique` fields of your `User` model:
 
 ```ts line-number highlight=1,3-9,15-23;add
-import { inputObjectType, arg } from "@nexus/schema"
+import { inputObjectType, arg } from '@nexus/schema'
 
 const UserUniqueInput = inputObjectType({
   name: 'UserUniqueInput',
@@ -678,18 +684,18 @@ const Query = queryType({
         userUniqueInput: arg({
           type: 'UserUniqueInput',
           nullable: false,
-       })
-      }
+        }),
+      },
     })
-  }
+  },
 })
 ```
 
 Since `UserUniqueInput` is a new type in your GraphQL schema, you again need to add it to the `types` option that's passed to `makeSchema`:
 
-```ts line-number
+```ts line-number highlight=2;normal
 export const schema = makeSchema({
-|types: [Query, User, Post, Profile, Category, UserUniqueInput],
+  types: [Query, User, Post, Profile, Category, UserUniqueInput],
   plugins: [nexusSchemaPrisma()],
   outputs: {
     schema: __dirname + '/../schema.graphql',
@@ -708,17 +714,17 @@ export const schema = makeSchema({
 
 If you look at the generated SDL version of your GraphQL schema inside `schema.graphql`, you'll notice that this change already added the correct _definition_ to your GraphQL schema:
 
-```graphql line-number
+```graphql line-number highlight=3,7-10;normal
 type Query {
   posts(searchString: String): [Post!]
-|  user(userUniqueInput: UserUniqueInput!): User
+  user(userUniqueInput: UserUniqueInput!): User
   users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, orderBy: Enumerable<UserOrderByInput>, skip: Int, where: UserWhereInput): [User!]!
 }
 
-| input UserUniqueInput {
-|   email: String
-|   id: String
-| }
+input UserUniqueInput {
+  email: String
+  id: String
+}
 ```
 
 You can even send the respective query via the GraphQL Playground already:
@@ -758,19 +764,18 @@ const Query = queryType({
         userUniqueInput: arg({
           type: 'UserUniqueInput',
           nullable: false,
-        })
+        }),
       },
       resolve: (_, args, context) => {
         return context.prisma.user.findUnique({
           where: {
             id: args.userUniqueInput?.id,
-            email: args.userUniqueInput?.email
-          }
+            email: args.userUniqueInput?.email,
+          },
         })
-      }
+      },
     })
   },
-  }
 })
 ```
 
@@ -855,7 +860,7 @@ const Mutation = mutationType({
     t.crud.createOneUser({
       alias: 'createUser',
     })
-  }
+  },
 })
 ```
 
@@ -935,9 +940,9 @@ const Mutation = mutationType({
         title: stringArg({ nullable: false }),
         content: stringArg(),
         authorId: stringArg({ nullable: false }),
-      }
+      },
     })
-  }
+  },
 })
 ```
 
@@ -989,13 +994,13 @@ const Mutation = mutationType({
             title: args.title,
             content: args.content,
             author: {
-              connect: { id: args.authorId }
-            }
-          }
+              connect: { id: args.authorId },
+            },
+          },
         })
-      }
+      },
     })
-  }
+  },
 })
 ```
 
@@ -1041,7 +1046,7 @@ const resolvers = {
 
 To get the same behavior with Nexus, you'll need to add a `t.field` definition to the `mutationType`:
 
-```ts line-number highlight=5-13;add
+```ts line-number highlight=5-14;add
 const Mutation = mutationType({
   definition(t) {
     // ... previous mutations
@@ -1051,12 +1056,12 @@ const Mutation = mutationType({
       args: {
         userUniqueInput: arg({
           type: 'UserUniqueInput',
-          nullable: false
+          nullable: false,
         }),
-        bio: stringArg({ nullable: false })
+        bio: stringArg({ nullable: false }),
       },
     })
-  }
+  },
 })
 ```
 
@@ -1074,7 +1079,10 @@ You can even send the respective mutation via the GraphQL Playground already:
 
 ```graphql
 mutation {
-  updateBio(userUniqueInput: { email: "alice@prisma.io" }, bio: "I like turtles") {
+  updateBio(
+    userUniqueInput: { email: "alice@prisma.io" }
+    bio: "I like turtles"
+  ) {
     id
     name
     profile {
@@ -1144,7 +1152,7 @@ type Mutation {
 const resolvers = {
   Mutation: {
     addPostToCategories: (_, args, context, info) => {
-      const ids = args.categoryIds.map(id => ({ id }))
+      const ids = args.categoryIds.map((id) => ({ id }))
       return context.prisma.mutation.updatePost(
         {
           data: {
@@ -1173,17 +1181,17 @@ const Mutation = mutationType({
   definition(t) {
     // ... mutations from before
 
-  t.field('addPostToCategories', {
+    t.field('addPostToCategories', {
       type: 'Post',
       args: {
         postId: stringArg({ nullable: false }),
         categoryIds: stringArg({
           list: true,
-          nullable: false
+          nullable: false,
         }),
       },
     })
-  }
+  },
 })
 ```
 
@@ -1232,22 +1240,22 @@ const Mutation = mutationType({
         postId: stringArg({ nullable: false }),
         categoryIds: stringArg({
           list: true,
-          nullable: false
+          nullable: false,
         }),
       },
       resolve: (_, args, context) => {
-        const ids = args.categoryIds.map(id => ({ id }))
+        const ids = args.categoryIds.map((id) => ({ id }))
         return context.prisma.post.update({
           where: {
-            id: args.postId
+            id: args.postId,
           },
           data: {
-            categories: { connect: ids }
-          }
+            categories: { connect: ids },
+          },
         })
-      }
+      },
     })
-  }
+  },
 })
 ```
 

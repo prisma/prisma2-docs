@@ -114,7 +114,12 @@ With this setup, you can retrieve records from the `users` table and store them 
 ```js
 const resultRows = await client.query('SELECT * FROM users WHERE user_id = 1')
 const userData = resultRows[0]
-const user = new User(userData.user_id, userData.name, userData.email, userData.isAdmin)
+const user = new User(
+  userData.user_id,
+  userData.name,
+  userData.email,
+  userData.isAdmin
+)
 // user = {
 //   user_id: 1,
 //   name: "Alice",

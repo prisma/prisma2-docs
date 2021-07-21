@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   })
 
-  User.associate = models => {
+  User.associate = (models) => {
     User.hasMany(models.Post, {
       foreignKey: 'authorId',
       as: 'posts',
@@ -81,7 +81,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: false,
     },
   })
-  Post.associate = models => {
+  Post.associate = (models) => {
     Post.belongsTo(models.User, {
       foreignKey: 'authorId',
       as: 'author',
@@ -107,7 +107,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   })
-  Profile.associate = models => {
+  Profile.associate = (models) => {
     Profile.belongsTo(models.User, {
       foreignKey: 'userId',
       as: 'user',
@@ -129,7 +129,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   })
-  Category.associate = models => {
+  Category.associate = (models) => {
     Category.belongsToMany(models.Post, {
       through: 'PostCategories',
       as: 'posts',
@@ -1124,7 +1124,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: false,
     },
   })
-  Post.associate = models => {
+  Post.associate = (models) => {
     Post.belongsTo(models.User, {
       foreignKey: 'authorId',
       as: 'author',
@@ -1146,7 +1146,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   })
-  Category.associate = models => {
+  Category.associate = (models) => {
     Category.belongsToMany(models.Post, {
       through: 'PostCategories',
       as: 'posts',

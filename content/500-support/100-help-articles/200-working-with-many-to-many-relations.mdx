@@ -113,7 +113,10 @@ await prisma.post.create({
   data: {
     title: 'Types of relations',
     tags: {
-      create: [{ tag: { create: { name: 'dev' } } }, { tag: { create: { name: 'prisma' } } }],
+      create: [
+        { tag: { create: { name: 'dev' } } },
+        { tag: { create: { name: 'prisma' } } },
+      ],
     },
   },
 })
@@ -161,8 +164,8 @@ This will provide the following output:
 Sometimes, it's not ideal to show the data for the relation table in your UI. In this case, it's best to map the data after fetching it on the server itself and sending that response to the frontend.
 
 ```ts
-const result = posts.map(post => {
-  return { ...post, tags: post.tags.map(tag => tag.tag) }
+const result = posts.map((post) => {
+  return { ...post, tags: post.tags.map((tag) => tag.tag) }
 })
 ```
 

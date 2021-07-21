@@ -210,7 +210,13 @@ model Post {
 <block content="TypeORM">
 
 ```ts
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm'
 
 @Entity()
 export class User {
@@ -223,10 +229,7 @@ export class User {
   @Column({ unique: true })
   email: string
 
-  @OneToMany(
-    type => Post,
-    post => post.author
-  )
+  @OneToMany((type) => Post, (post) => post.author)
   posts: Post[]
 }
 
@@ -244,10 +247,7 @@ export class Post {
   @Column({ default: false })
   published: boolean
 
-  @ManyToOne(
-    type => User,
-    user => user.posts
-  )
+  @ManyToOne((type) => User, (user) => user.posts)
   author: User
 }
 ```
@@ -303,10 +303,7 @@ export class Post {
   @Column({ default: false })
   published: boolean
 
-  @ManyToOne(
-    type => User,
-    user => user.posts
-  )
+  @ManyToOne((type) => User, (user) => user.posts)
   author: User
 }
 ```
@@ -440,10 +437,7 @@ export class Post {
   @Column({ default: false })
   published: boolean
 
-  @ManyToOne(
-    type => User,
-    user => user.posts
-  )
+  @ManyToOne((type) => User, (user) => user.posts)
   author: User
 }
 ```
@@ -460,10 +454,7 @@ export class User {
   @Column({ unique: true })
   email: string
 
-  @OneToMany(
-    type => Post,
-    post => post.author
-  )
+  @OneToMany((type) => Post, (post) => post.author)
   posts: Post[]
 }
 ```
@@ -620,10 +611,7 @@ export class Post {
   @Column({ default: false })
   published: boolean
 
-  @ManyToOne(
-    type => User,
-    user => user.posts
-  )
+  @ManyToOne((type) => User, (user) => user.posts)
   author: User
 }
 ```
@@ -789,10 +777,7 @@ export class User {
   @Column({ unique: true })
   email: string
 
-  @OneToMany(
-    type => Post,
-    post => post.author
-  )
+  @OneToMany((type) => Post, (post) => post.author)
   posts: Post[]
 }
 ```
@@ -1209,7 +1194,10 @@ const user = await prisma.user.create({
     email: 'bob.rufus@prisma.io',
     name: 'Bob Rufus',
     Post: {
-      create: [{ title: 'Working at Prisma' }, { title: 'All about databases' }],
+      create: [
+        { title: 'Working at Prisma' },
+        { title: 'All about databases' },
+      ],
     },
   },
 })
@@ -1218,7 +1206,7 @@ const user = await prisma.user.create({
 **TypeORM**
 
 ```ts
-await getConnection().$transaction(async transactionalEntityManager => {
+await getConnection().$transaction(async (transactionalEntityManager) => {
   const user = getRepository(User).create({
     name: 'Bob',
     email: 'bob@prisma.io',

@@ -24,8 +24,16 @@ Prisma is an [open source](https://github.com/prisma/prisma) next-generation ORM
 
 Prisma Client can be used in _any_ Node.js (supported versions) or TypeScript backend application (including serverless applications and microservices). This can be a [REST API](../prisma-in-your-stack/rest), a [GraphQL API](../prisma-in-your-stack/graphql), a gRPC API, or anything else that needs a database.
 
-<div style={{textAlign: 'center', margin: '2em auto'}}>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/EEDGwLB55bI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div style={{ textAlign: 'center', margin: '2em auto' }}>
+  <iframe
+    width="560"
+    height="315"
+    src="https://www.youtube.com/embed/EEDGwLB55bI"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+  ></iframe>
 </div>
 
 ## How does Prisma work?
@@ -206,7 +214,10 @@ const allUsers = await prisma.user.findMany({
 // Run inside `async` function
 const filteredPosts = await prisma.post.findMany({
   where: {
-    OR: [{ title: { contains: 'prisma' } }, { content: { contains: 'prisma' } }],
+    OR: [
+      { title: { contains: 'prisma' } },
+      { content: { contains: 'prisma' } },
+    ],
   },
 })
 ```

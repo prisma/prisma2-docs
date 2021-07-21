@@ -57,7 +57,8 @@ const handleRawBody = (node) => {
     )
     filteredSections.map(
       (para) =>
-        (para !== '\n' || para !== '\n\n' || para !== '' || para !== ' ') && finalSections.push({ para, heading: fSec.heading })
+        (para !== '\n' || para !== '\n\n' || para !== '' || para !== ' ') &&
+        finalSections.push({ para, heading: fSec.heading })
     )
   })
 
@@ -152,6 +153,3 @@ module.exports = {
   indexName: process.env.GATSBY_ALGOLIA_INDEX_NAME,
   queries,
 }
-
-
-

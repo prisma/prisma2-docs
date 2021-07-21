@@ -51,7 +51,7 @@ const result = await prisma.user.findMany({
 </cmd>
 <cmdResult>
 
-```js
+```json5
 [
   {
     id: 1,
@@ -116,7 +116,7 @@ const result = await prisma.user.findMany({
 </cmd>
 <cmdResult>
 
-```js
+```json5
 [{ email: 'yewande@prisma.io' }, { email: `raheem@gmail.com` }]
 ```
 
@@ -197,12 +197,12 @@ To use case-insensitive filtering, add the `mode` property to a particular filte
 const users = await prisma.user.findMany({
   where: {
     email: {
-      endsWith: "prisma.io",
-      mode: "insensitive", // Default value: default
+      endsWith: 'prisma.io',
+      mode: 'insensitive', // Default value: default
     },
     name: {
-      equals: "Archibald" // Default mode
-    }
+      equals: 'Archibald', // Default mode
+    },
   },
 })
 ```
@@ -311,9 +311,9 @@ For example, the following query sorts all posts by the author's email address:
 const posts = await prisma.post.findMany({
   orderBy: {
     author: {
-      email: "asc"
-    }
-  }
+      email: 'asc',
+    },
+  },
 })
 ```
 
@@ -321,7 +321,15 @@ const posts = await prisma.post.findMany({
 
 <div class="videoWrapper">
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/vmVUeZny73o" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/vmVUeZny73o"
+  title="YouTube video player"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen
+></iframe>
 
 </div>
 
@@ -341,9 +349,9 @@ const getActiveusers = await prisma.user.findMany({
   take: 10,
   orderBy: {
     posts: {
-      count: "desc"
-    }
-  }
+      count: 'desc',
+    },
+  },
 })
 ```
 

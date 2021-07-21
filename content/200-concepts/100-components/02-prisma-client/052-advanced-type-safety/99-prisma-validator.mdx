@@ -86,7 +86,12 @@ import { Prisma, PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 // Create a new function and pass the parameters onto the validator
-const createUserAndPost = (name: string, email: string, postTitle: string, profileBio: string) => {
+const createUserAndPost = (
+  name: string,
+  email: string,
+  postTitle: string,
+  profileBio: string
+) => {
   return Prisma.validator<Prisma.UserCreateInput>()({
     name,
     email,
@@ -112,12 +117,19 @@ const findSpecificUser = (email: string) => {
 // Create the user in the database based on form input
 // Run inside async function
 await prisma.user.create({
-  data: createUserAndPost('Rich', 'rich@boop.com', 'Life of Pie', 'Learning each day'),
+  data: createUserAndPost(
+    'Rich',
+    'rich@boop.com',
+    'Life of Pie',
+    'Learning each day'
+  ),
 })
 
 // Find the specific user based on form input
 // Run inside async function
-const oneUser = await prisma.user.findUnique({ where: findSpecificUser('rich@boop.com') })
+const oneUser = await prisma.user.findUnique({
+  where: findSpecificUser('rich@boop.com'),
+})
 ```
 
 The `createUserAndPost` custom function is created using the `Prisma.validator` and passed a generated type, `UserCreateInput`. The `Prisma.validator` validates the functions input because the types assigned to the parameters must match those the generated type expects.

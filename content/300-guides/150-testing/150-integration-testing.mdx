@@ -217,19 +217,19 @@ The ecommerce application you are testing has a function which creates an order.
 An example of how such a function might look can be seen below:
 
 ```ts file=create-order.ts
-import prisma from "../client";
+import prisma from '../client'
 
 export interface Customer {
-  id?: number;
-  name?: string;
-  email: string;
-  address?: string;
+  id?: number
+  name?: string
+  email: string
+  address?: string
 }
 
 export interface OrderInput {
-  customer: Customer;
-  productId: number;
-  quantity: number;
+  customer: Customer
+  productId: number
+  quantity: number
 }
 
 /**
@@ -237,18 +237,18 @@ export interface OrderInput {
  * @param input The order parameters
  */
 export async function createOrder(input: OrderInput) {
-  const { productId, quantity, customer } = input;
-  const { name, email, address } = customer;
+  const { productId, quantity, customer } = input
+  const { name, email, address } = customer
 
   // Get the product
   const product = await prisma.product.findUnique({
     where: {
       id: productId,
     },
-  });
+  })
 
   // If the product is null its out of stock, return error.
-  if (!product) return new Error('Out of stock');
+  if (!product) return new Error('Out of stock')
 
   // If the customer is new then create the record, otherwise connect via their unique email
   await prisma.order.create({
@@ -277,9 +277,8 @@ export async function createOrder(input: OrderInput) {
         },
       },
     },
-  });
+  })
 }
-
 ```
 
 ### The test suite
@@ -301,93 +300,93 @@ However, this doesn't scale as well as having a more generic solution that maps 
 </Tip>
 
 ```ts file=__tests__/create-order.ts
-import prisma from "../src/client";
-import { createOrder, Customer, OrderInput } from "../src/functions/index";
+import prisma from '../src/client'
+import { createOrder, Customer, OrderInput } from '../src/functions/index'
 
 beforeAll(async () => {
-    // create product categories
-    await prisma.category.createMany({
-      data: [{ name: "Wand" }, { name: "Broomstick" }],
-    });
+  // create product categories
+  await prisma.category.createMany({
+    data: [{ name: 'Wand' }, { name: 'Broomstick' }],
+  })
 
-    console.log("✨ 2 categories successfully created!");
+  console.log('✨ 2 categories successfully created!')
 
-    // create products
-    await prisma.product.createMany({
-      data: [
-        {
-          name: 'Holly, 11", phoenix feather',
-          description: "Harry Potters wand",
-          price: 100,
-          sku: 1,
-          categoryId: 1,
-        },
-        {
-          name: "Nimbus 2000",
-          description: "Harry Potters broom",
-          price: 500,
-          sku: 2,
-          categoryId: 2,
-        },
-      ],
-    });
-
-    console.log("✨ 2 products successfully created!");
-
-    // create the customer
-    await prisma.customer.create({
-      data: {
-        name: "Harry Potter",
-        email: "harry@hogwarts.io",
-        address: "4 Privet Drive",
+  // create products
+  await prisma.product.createMany({
+    data: [
+      {
+        name: 'Holly, 11", phoenix feather',
+        description: 'Harry Potters wand',
+        price: 100,
+        sku: 1,
+        categoryId: 1,
       },
-    });
+      {
+        name: 'Nimbus 2000',
+        description: 'Harry Potters broom',
+        price: 500,
+        sku: 2,
+        categoryId: 2,
+      },
+    ],
+  })
 
-    console.log("✨ 1 customer successfully created!");
-});
+  console.log('✨ 2 products successfully created!')
+
+  // create the customer
+  await prisma.customer.create({
+    data: {
+      name: 'Harry Potter',
+      email: 'harry@hogwarts.io',
+      address: '4 Privet Drive',
+    },
+  })
+
+  console.log('✨ 1 customer successfully created!')
+})
 
 afterAll(async () => {
-  const deleteOrderDetails = prisma.orderDetails.deleteMany();
-  const deleteProduct = prisma.product.deleteMany();
-  const deleteCategory = prisma.category.deleteMany();
-  const deleteCustomerOrder = prisma.customerOrder.deleteMany();
-  const deleteCustomer = prisma.customer.deleteMany();
+  const deleteOrderDetails = prisma.orderDetails.deleteMany()
+  const deleteProduct = prisma.product.deleteMany()
+  const deleteCategory = prisma.category.deleteMany()
+  const deleteCustomerOrder = prisma.customerOrder.deleteMany()
+  const deleteCustomer = prisma.customer.deleteMany()
 
   await prisma.$transaction([
     deleteOrderDetails,
     deleteProduct,
     deleteCategory,
     deleteCustomerOrder,
-    deleteCustomer
+    deleteCustomer,
   ])
 
-  await prisma.$disconnect();
-});
+  await prisma.$disconnect()
+})
 
-it("should create 1 new customer with 1 order", async () => {
+it('should create 1 new customer with 1 order', async () => {
   // The new customers details
   const customer: Customer = {
     id: 2,
-    name: "Hermione Granger",
-    email: "hermione@hogwarts.io",
-    address: "2 Hampstead Heath",
-  };
+    name: 'Hermione Granger',
+    email: 'hermione@hogwarts.io',
+    address: '2 Hampstead Heath',
+  }
   // The new orders details
   const order: OrderInput = {
     customer,
     productId: 1,
     quantity: 1,
-  };
+  }
 
   // Create the order and customer
-  await createOrder(order);
+  await createOrder(order)
 
   // Check if the new customer was created by filtering on unique email field
   const newCustomer = await prisma.customer.findUnique({
     where: {
       email: customer.email,
     },
-  });
+  })
 
   // Check if the new order was created by filtering on unique email field of the customer
   const newOrder = await prisma.order.findFirst({
@@ -396,29 +395,28 @@ it("should create 1 new customer with 1 order", async () => {
         email: customer.email,
       },
     },
-  });
+  })
 
   // Expect the new customer to have been created and match the input
-  expect(newCustomer).toEqual(customer);
+  expect(newCustomer).toEqual(customer)
   // Expect the new order to have been created and contain the new customer
-  expect(newOrder).toHaveProperty("customerId", 2);
+  expect(newOrder).toHaveProperty('customerId', 2)
+})
 
-});
-
-it("should create 1 order with an existing customer", async () => {
+it('should create 1 order with an existing customer', async () => {
   // The existing customers email
   const customer: Customer = {
-    email: "harry@hogwarts.io",
-  };
+    email: 'harry@hogwarts.io',
+  }
   // The new orders details
   const order: OrderInput = {
     customer,
     productId: 1,
     quantity: 1,
-  };
+  }
 
   // Create the order and connect the existing customer
-  await createOrder(order);
+  await createOrder(order)
 
   // Check if the new order was created by filtering on unique email field of the customer
   const newOrder = await prisma.order.findFirst({
@@ -427,30 +425,27 @@ it("should create 1 order with an existing customer", async () => {
         email: customer.email,
       },
     },
-  });
+  })
 
   // Expect the new order to have been created and contain the existing customer with an id of 1 (Harry Potter from the seed script)
-  expect(newOrder).toHaveProperty("customerId", 1);
-
-});
+  expect(newOrder).toHaveProperty('customerId', 1)
+})
 
 it("should show 'Out of stock' message if productId doesn't exit", async () => {
   // The existing customers email
   const customer: Customer = {
-    email: "harry@hogwarts.io",
-  };
+    email: 'harry@hogwarts.io',
+  }
   // The new orders details
   const order: OrderInput = {
     customer,
     productId: 3,
     quantity: 1,
-  };
+  }
 
   // The productId supplied doesn't exit so the function should return an "Out of stock" message
-  await expect(createOrder(order)).resolves.toEqual(new Error('Out of stock'));
-
-});
-
+  await expect(createOrder(order)).resolves.toEqual(new Error('Out of stock'))
+})
 ```
 
 ## Running the tests

@@ -73,9 +73,9 @@ Inside the `main` function, add the following query to read all `User` records f
 
 ```ts file=index.ts highlight=3,4;add
 async function main() {
-   // ... you will write your Prisma Client queries here
-  const allUsers = await prisma.user.findMany();
-  console.log(allUsers);
+  // ... you will write your Prisma Client queries here
+  const allUsers = await prisma.user.findMany()
+  console.log(allUsers)
 }
 ```
 
@@ -348,12 +348,17 @@ Fantastic, you just wrote new data into your database for the first time using P
 
 <NavigationLinksContainer>
 
-<ButtonLink color="dark" type="primary" href="./install-prisma-client-node-postgres" arrowLeft>
-    Install Prisma Client
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="./install-prisma-client-node-postgres"
+  arrowLeft
+>
+  Install Prisma Client
 </ButtonLink>
 
 <ButtonLink color="dark" type="primary" href="./next-steps-node-postgres" arrow>
-    Next Steps
+  Next Steps
 </ButtonLink>
 
 </NavigationLinksContainer>
@@ -364,12 +369,17 @@ Fantastic, you just wrote new data into your database for the first time using P
 
 <NavigationLinksContainer>
 
-<ButtonLink color="dark" type="primary" href="./install-prisma-client-node-mysql" arrowLeft>
-    Install Prisma Client
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="./install-prisma-client-node-mysql"
+  arrowLeft
+>
+  Install Prisma Client
 </ButtonLink>
 
 <ButtonLink color="dark" type="primary" href="./next-steps-node-mysql" arrow>
-    Next Steps
+  Next Steps
 </ButtonLink>
 
 </NavigationLinksContainer>
@@ -380,12 +390,22 @@ Fantastic, you just wrote new data into your database for the first time using P
 
 <NavigationLinksContainer>
 
-<ButtonLink color="dark" type="primary" href="./install-prisma-client-typescript-postgres" arrowLeft>
-    Install Prisma Client
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="./install-prisma-client-typescript-postgres"
+  arrowLeft
+>
+  Install Prisma Client
 </ButtonLink>
 
-<ButtonLink color="dark" type="primary" href="./next-steps-typescript-postgres" arrow>
-    Next Steps
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="./next-steps-typescript-postgres"
+  arrow
+>
+  Next Steps
 </ButtonLink>
 
 </NavigationLinksContainer>
@@ -396,12 +416,22 @@ Fantastic, you just wrote new data into your database for the first time using P
 
 <NavigationLinksContainer>
 
-<ButtonLink color="dark" type="primary" href="./install-prisma-client-typescript-mysql" arrowLeft>
-    Install Prisma Client
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="./install-prisma-client-typescript-mysql"
+  arrowLeft
+>
+  Install Prisma Client
 </ButtonLink>
 
-<ButtonLink color="dark" type="primary" href="./next-steps-typescript-mysql" arrow>
-    Next Steps
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="./next-steps-typescript-mysql"
+  arrow
+>
+  Next Steps
 </ButtonLink>
 
 </NavigationLinksContainer>

@@ -39,7 +39,13 @@ Example field value:
 The `Json` field supports a few additional types, such as `string` and `boolean`. These additional types exist to match the types supported by [`JSON.parse()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse):
 
 ```ts
-export declare type JsonValue = string | number | boolean | null | JsonObject | JsonArray
+export declare type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonObject
+  | JsonArray
 ```
 
 </TopBlock>
@@ -81,7 +87,10 @@ See also: [Advanced example: Update a nested JSON key value](#advanced-example-u
 The following example writes a JSON object to the `extendedPetsData` field:
 
 ```ts
-var json = [{ name: 'Bob the dog' }, { name: 'Claudine the cat' }] as Prisma.JsonArray
+var json = [
+  { name: 'Bob the dog' },
+  { name: 'Claudine the cat' },
+] as Prisma.JsonArray
 
 const createUser = await prisma.user.create({
   data: {
@@ -101,7 +110,15 @@ Advanced `Json` filtering is available as a Preview feature in [2.23.0 and later
 
 <div class="videoWrapper">
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/SUQ5vem9KdM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/SUQ5vem9KdM"
+  title="YouTube video player"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen
+></iframe>
 
 </div>
 
@@ -158,7 +175,9 @@ const getUsers = await prisma.user.findMany({
 The following query returns all users where the value of `extendedPetsData` does **not** match the `json` variable exactly:
 
 ```ts
-var json = { extendedPetsData: [{ name: 'Bob the dog' }, { name: 'Claudine the cat' }] }
+var json = {
+  extendedPetsData: [{ name: 'Bob the dog' }, { name: 'Claudine the cat' }],
+}
 
 const getUsers = await prisma.user.findMany({
   where: {
@@ -540,14 +559,14 @@ const checkJson = await prisma.user.findMany({
 
 - If you are using PostgreSQL, you must pass in an array of objects to match, even if that array only contains one object:
 
-  ```js
-  [{ "status": "expired", "insuranceID": 92 }] // PostgreSQL
+  ```json5
+  [{ status: 'expired', insuranceID: 92 }] // PostgreSQL
   ```
 
   If you are using MySQL, you must pass in a single object to match:
 
-  ```js
-  { "status": "expired", "insuranceID": 92 } // MySQL
+  ```json5
+  { status: 'expired', insuranceID: 92 } // MySQL
   ```
 
 - If your filter array contains multiple objects, PostgreSQL will only return results if _all_ objects are present - not if at least one object is present.
@@ -661,8 +680,7 @@ const getUsers = await prisma.user.findMany({
 
 </tab>
 
-<tab>
-</tab>
+<tab></tab>
 
 </TabbedContent>
 
@@ -725,7 +743,7 @@ The following example:
 ```ts
 const userQueries: string | any[] = []
 
-getUsers.forEach(user => {
+getUsers.forEach((user) => {
   if (
     user.extendedPetsData &&
     typeof user.extendedPetsData === 'object' &&
@@ -738,7 +756,7 @@ getUsers.forEach(user => {
     if (i && typeof i === 'object' && Array.isArray(i)) {
       const insurancesArray = i as Prisma.JsonArray
 
-      insurancesArray.forEach(i => {
+      insurancesArray.forEach((i) => {
         if (i && typeof i === 'object' && !Array.isArray(i)) {
           const insuranceObject = i as Prisma.JsonObject
 
@@ -790,7 +808,7 @@ console.log(checkJson.length)
 ```ts
 const userQueries: string | any[] = []
 
-getUsers.forEach(user => {
+getUsers.forEach((user) => {
   if (
     user.extendedPetsData &&
     typeof user.extendedPetsData === 'object' &&
@@ -803,7 +821,7 @@ getUsers.forEach(user => {
     if (i && typeof i === 'object' && Array.isArray(i)) {
       const insurancesArray = i as Prisma.JsonArray
 
-      insurancesArray.forEach(i => {
+      insurancesArray.forEach((i) => {
         if (i && typeof i === 'object' && !Array.isArray(i)) {
           const insuranceObject = i as Prisma.JsonObject
 

@@ -37,14 +37,15 @@ The same method is implemented as a [tagged template](https://developer.mozilla.
 
 ```ts no-lines
 const email = 'edna@prisma.io'
-const result = await prisma.$queryRaw`SELECT * FROM User WHERE email = ${email};`
+const result =
+  await prisma.$queryRaw`SELECT * FROM User WHERE email = ${email};`
 ```
 
 ### Return type
 
 `$queryRaw` returns an array. Each object corresponds to a database record:
 
-```js
+```json5
 [
   { id: 1, email: 'sarah@prisma.io', name: 'Sarah' },
   { id: 2, email: 'alice@prisma.io', name: 'Alice' },
@@ -103,7 +104,7 @@ The following query returns all posts and prints out the value of `published` fi
 ```ts
 const result = await prisma.$queryRaw<Post[]>`SELECT * FROM Post`
 
-result.forEach(x => {
+result.forEach((x) => {
   console.log(x.published)
 })
 ```
@@ -128,7 +129,8 @@ The same method is implemented as a [tagged template](https://developer.mozilla.
 const emailValidated = true
 const active = true
 
-const result: number = await prisma.$executeRaw`UPDATE User SET active = ${active} WHERE emailValidated = ${emailValidated};`
+const result: number =
+  await prisma.$executeRaw`UPDATE User SET active = ${active} WHERE emailValidated = ${emailValidated};`
 ```
 
 Be aware that:
@@ -178,23 +180,22 @@ const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${userId};`
 Prisma Client specifically uses [SQL Template Tag](https://github.com/blakeembrey/sql-template-tag), which exposes a number of helpers. For example, the following query uses `join()` to pass in a list of IDs:
 
 ```ts
-import { Prisma } from "@prisma/client";
+import { Prisma } from '@prisma/client'
 
-const ids = [1, 3, 5, 10, 20];
-const result = await prisma.$queryRaw`SELECT * FROM User WHERE id IN (${Prisma.join(
-  ids
-)})`;
+const ids = [1, 3, 5, 10, 20]
+const result =
+  await prisma.$queryRaw`SELECT * FROM User WHERE id IN (${Prisma.join(ids)})`
 ```
 
 The following example uses the `empty` and `sql` helpers to change the query depending on whether `userName` is empty:
 
 ```ts
-import { Prisma } from "@prisma/client";
+import { Prisma } from '@prisma/client'
 
 const userName = ''
 const result = await prisma.$queryRaw`SELECT * FROM User ${
   userName ? Prisma.sql`WHERE name = ${userName}` : Prisma.empty // Cannot use "" or NULL here!
-}`;
+}`
 ```
 
 ### Parameterized queries
@@ -294,7 +295,8 @@ By contrast, the same query using **tagged templates** escapes `inputString` and
 
 ```ts
 const inputString = '"Sarah" UNION SELECT id, title, content FROM Post'
-const result = await prisma.$queryRaw`SELECT id, name, email FROM User WHERE name = ${inputString}`
+const result =
+  await prisma.$queryRaw`SELECT id, name, email FROM User WHERE name = ${inputString}`
 
 console.log(result)
 ```

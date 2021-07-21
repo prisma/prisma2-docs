@@ -10,7 +10,10 @@ techMetaTitles:
   ]
 techMetaDescriptions:
   [
-    { name: 'mysql', value: 'Problems and workarounds for Prisma 1 and 2.0 schemas with MySQL' },
+    {
+      name: 'mysql',
+      value: 'Problems and workarounds for Prisma 1 and 2.0 schemas with MySQL',
+    },
     {
       name: 'postgres',
       value: 'Problems and workarounds for Prisma 1 and 2.0 schemas with PostgreSQL',
@@ -801,14 +804,14 @@ This is the `result of the query:
 To access just the boolean values from the list, you can `map` over the `coinflips` on `user` as follows:
 
 ```ts
-const currentCoinflips = user!.coinflips.map(cf => cf.value)
+const currentCoinflips = user!.coinflips.map((cf) => cf.value)
 ```
 
 > **Note**: The exclamation mark above means that you're _force unwrapping_ the `user` value. This is necessary because the `user` returned from the previous query might be `null`.
 
 Here's the value of `currentCoinflips` after the call to `map`:
 
-```js
+```json5
 [false, true, false, true, true, false]
 ```
 

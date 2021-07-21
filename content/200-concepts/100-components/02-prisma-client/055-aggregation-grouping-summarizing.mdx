@@ -102,7 +102,14 @@ The following video uses `groupBy` to summarize total COVID-19 cases by continen
 
 <div class="videoWrapper">
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/BdlCPdPaorY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/BdlCPdPaorY"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen
+></iframe>
 
 </div>
 
@@ -143,15 +150,15 @@ Use `where` to filter all records **before grouping**. The following example gro
 
 ```ts highlight=3-7;normal
 const groupUsers = await prisma.user.groupBy({
-  by: ["country"],
+  by: ['country'],
   where: {
     email: {
-      contains: "prisma.io"
-    }
+      contains: 'prisma.io',
+    },
   },
   _sum: {
-    profileViews: true
-  }
+    profileViews: true,
+  },
 })
 ```
 

@@ -88,11 +88,11 @@ const prisma = new PrismaClient({
       level: 'warn',
     },
   ],
-});
+})
 
-prisma.$on('query', e => {
-  console.log("Query: " + e.query)
-  console.log("Duration: " + e.duration + "ms")
+prisma.$on('query', (e) => {
+  console.log('Query: ' + e.query)
+  console.log('Duration: ' + e.duration + 'ms')
 })
 ```
 

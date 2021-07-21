@@ -47,17 +47,10 @@ export class User {
   @Column({ unique: true })
   email: string
 
-  @OneToMany(
-    type => Post,
-    post => post.author
-  )
+  @OneToMany((type) => Post, (post) => post.author)
   posts: Post[]
 
-  @OneToOne(
-    type => Profile,
-    profile => profile.user,
-    { cascade: true }
-  )
+  @OneToOne((type) => Profile, (profile) => profile.user, { cascade: true })
   profile: Profile
 }
 ```
@@ -81,16 +74,10 @@ export class Post {
   @Column({ default: false })
   published: boolean
 
-  @ManyToOne(
-    type => User,
-    user => user.posts
-  )
+  @ManyToOne((type) => User, (user) => user.posts)
   author: User
 
-  @ManyToMany(
-    type => Category,
-    category => category.posts
-  )
+  @ManyToMany((type) => Category, (category) => category.posts)
   @JoinTable()
   categories: Category[]
 }
@@ -109,10 +96,7 @@ export class Profile {
   @Column({ nullable: true })
   bio: string
 
-  @OneToOne(
-    type => User,
-    user => user.profile
-  )
+  @OneToOne((type) => User, (user) => user.profile)
   @JoinColumn()
   user: User
 }
@@ -131,10 +115,7 @@ export class Category {
   @Column()
   name: string
 
-  @ManyToMany(
-    type => Post,
-    post => post.categories
-  )
+  @ManyToMany((type) => Post, (post) => post.categories)
   posts: Post[]
 }
 ```
@@ -210,7 +191,9 @@ export class Init1605698662257 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "post_categories_category" DROP CONSTRAINT "FK_93b566d522b73cb8bc46f7405bd"`
     )
-    await queryRunner.query(`ALTER TABLE "post" DROP CONSTRAINT "FK_c6fb082a3114f35d0cc27c518e0"`)
+    await queryRunner.query(
+      `ALTER TABLE "post" DROP CONSTRAINT "FK_c6fb082a3114f35d0cc27c518e0"`
+    )
     await queryRunner.query(
       `ALTER TABLE "profile" DROP CONSTRAINT "FK_a24972ebd73b106250713dcddd9"`
     )
@@ -684,7 +667,10 @@ export async function filterPostsAction(req, res) {
   const postRepository = getManager().getRepository(Post)
 
   const filteredPosts = await postRepository.find({
-    where: [{ title: Like(`%${searchString}%`) }, { content: Like(`%${searchString}%`) }],
+    where: [
+      { title: Like(`%${searchString}%`) },
+      { content: Like(`%${searchString}%`) },
+    ],
   })
 
   res.send(filteredPosts)
@@ -985,7 +971,13 @@ const post = await prisma.post.update({
 Similar to the `@manyToMany` decorator in TypeORM, Prisma allows you to [model many-to-many relations _implicitly_](../../concepts/components/prisma-schema/relations#implicit-vs-explicit-many-to-many-relations). That is, a many-to-many relation where you do not have to manage the [relation table](../../concepts/components/prisma-schema/relations/many-to-many-relations#relation-tables) (also sometimes called JOIN table) _explicitly_ in your schema. Here is an example with TypeORM:
 
 ```ts
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm'
 import { Category } from './Category'
 
 @Entity()
@@ -993,10 +985,7 @@ export class Post {
   @PrimaryGeneratedColumn()
   id: number
 
-  @ManyToMany(
-    type => Category,
-    category => category.posts
-  )
+  @ManyToMany((type) => Category, (category) => category.posts)
   @JoinTable()
   categories: Category[]
 }
@@ -1011,10 +1000,7 @@ export class Category {
   @PrimaryGeneratedColumn()
   id: number
 
-  @ManyToMany(
-    type => Post,
-    post => post.categories
-  )
+  @ManyToMany((type) => Post, (post) => post.categories)
   posts: Post[]
 }
 ```

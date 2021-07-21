@@ -151,9 +151,9 @@ async function main() {
           title: 'My first post',
           body: 'Lots of really interesting stuff',
           slug: 'my-first-post',
-        }
-      }
-    }
+        },
+      },
+    },
   })
 
   const allUsers = await prisma.user.findMany({
@@ -182,9 +182,9 @@ async function main() {
           title: 'My first post',
           body: 'Lots of really interesting stuff',
           slug: 'my-first-post',
-        }
-      }
-    }
+        },
+      },
+    },
   })
 
   const allUsers = await prisma.user.findMany({
@@ -222,7 +222,7 @@ node index.js
 
 The output should look similar to this:
 
-```js no-lines
+```json5 no-lines
 [
   {
     id: '60cc9b0e001e3bfd00a6eddf',
@@ -234,10 +234,10 @@ The output should look similar to this:
         slug: 'my-first-post',
         title: 'My first post',
         body: 'Lots of really interesting stuff',
-        userId: '60cc9b0e001e3bfd00a6eddf'
-      }
-    ]
-  }
+        userId: '60cc9b0e001e3bfd00a6eddf',
+      },
+    ],
+  },
 ]
 ```
 
@@ -291,13 +291,13 @@ Before moving on to the next section, you'll add a couple of comments to the `Po
 async function main() {
   await prisma.post.update({
     where: {
-      slug: "my-first-post",
+      slug: 'my-first-post',
     },
     data: {
       comments: {
         createMany: {
           data: [
-            { comment: "Great post!" },
+            { comment: 'Great post!' },
             { comment: "Can't wait to read more!" },
           ],
         },
@@ -305,12 +305,12 @@ async function main() {
     },
   })
   const posts = await prisma.post.findMany({
-       include: {
-           comments: true
-       }
-   })
+    include: {
+      comments: true,
+    },
+  })
 
-  console.dir(posts, {depth: Infinity})
+  console.dir(posts, { depth: Infinity })
 }
 ```
 
@@ -322,13 +322,13 @@ async function main() {
 async function main() {
   await prisma.post.update({
     where: {
-      slug: "my-first-post",
+      slug: 'my-first-post',
     },
     data: {
       comments: {
         createMany: {
           data: [
-            { comment: "Great post!" },
+            { comment: 'Great post!' },
             { comment: "Can't wait to read more!" },
           ],
         },
@@ -336,12 +336,12 @@ async function main() {
     },
   })
   const posts = await prisma.post.findMany({
-       include: {
-           comments: true
-       }
-   })
+    include: {
+      comments: true,
+    },
+  })
 
-  console.dir(posts, {depth: Infinity})
+  console.dir(posts, { depth: Infinity })
 }
 ```
 
@@ -369,7 +369,7 @@ node index.js
 
 You will see the following output:
 
-```js no-lines
+```json5 no-lines
 [
   {
     id: '60cc9bad005059d6007f45dd',
@@ -381,15 +381,15 @@ You will see the following output:
       {
         id: '60cca420008a21d800578793',
         postId: '60cca40300af8bf000f6ca99',
-        comment: 'Great post!'
+        comment: 'Great post!',
       },
       {
         id: '60cca420008a21d800578794',
         postId: '60cca40300af8bf000f6ca99',
-        comment: "Can't wait to try this!"
-      }
-    ]
-  }
+        comment: "Can't wait to try this!",
+      },
+    ],
+  },
 ]
 ```
 
@@ -399,12 +399,17 @@ Fantastic, you just wrote new data into your database for the first time using P
 
 <NavigationLinksContainer>
 
-<ButtonLink color="dark" type="primary" href="./install-prisma-client-node-mongodb" arrowLeft>
-    Install Prisma Client
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="./install-prisma-client-node-mongodb"
+  arrowLeft
+>
+  Install Prisma Client
 </ButtonLink>
 
 <ButtonLink color="dark" type="primary" href="./next-steps-node-mongodb" arrow>
-    Next Steps
+  Next Steps
 </ButtonLink>
 
 </NavigationLinksContainer>
@@ -415,12 +420,22 @@ Fantastic, you just wrote new data into your database for the first time using P
 
 <NavigationLinksContainer>
 
-<ButtonLink color="dark" type="primary" href="./install-prisma-client-typescript-mongodb" arrowLeft>
-    Install Prisma Client
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="./install-prisma-client-typescript-mongodb"
+  arrowLeft
+>
+  Install Prisma Client
 </ButtonLink>
 
-<ButtonLink color="dark" type="primary" href="./next-steps-typescript-mongodb" arrow>
-    Next Steps
+<ButtonLink
+  color="dark"
+  type="primary"
+  href="./next-steps-typescript-mongodb"
+  arrow
+>
+  Next Steps
 </ButtonLink>
 
 </NavigationLinksContainer>

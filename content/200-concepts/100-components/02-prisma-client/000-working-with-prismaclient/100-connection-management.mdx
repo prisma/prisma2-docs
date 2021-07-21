@@ -58,21 +58,20 @@ One scenario where you should call `$disconnect()` explicitly is where a script:
 The following script creates a new instance of `PrismaClient`, performs a task, and then disconnects - which closes the connection pool:
 
 ```ts highlight=19;normal
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
-const emailService = new EmailService();
+const emailService = new EmailService()
 
 async function main() {
+  const allUsers = await prisma.user.findMany()
+  const emails = allUsers.map((x) => x.email)
 
-    const allUsers = await prisma.user.findMany();
-    const emails = allUsers.map(x => x.email)
-
-    await emailService.send(emails, "Hello!");
+  await emailService.send(emails, 'Hello!')
 }
 
 main()
-  .catch(e => {
+  .catch((e) => {
     throw e
   })
   .finally(async () => {

@@ -339,8 +339,14 @@ The following MongoDB documents represent a many-to-many self-relation between f
 {
   "_id": { "$oid": "60d9866f00a3e930009a6cdd" },
   "name": "Bob",
-  "followedByIDs": [{ "$oid": "60d9866f00a3e930009a6cde" }, { "$oid": "60d9867000a3e930009a6cdf" }],
-  "followingIDs": [{ "$oid": "60d9867000a3e930009a6ce0" }, { "$oid": "60d9867000a3e930009a6ce1" }]
+  "followedByIDs": [
+    { "$oid": "60d9866f00a3e930009a6cde" },
+    { "$oid": "60d9867000a3e930009a6cdf" }
+  ],
+  "followingIDs": [
+    { "$oid": "60d9867000a3e930009a6ce0" },
+    { "$oid": "60d9867000a3e930009a6ce1" }
+  ]
 }
 ```
 

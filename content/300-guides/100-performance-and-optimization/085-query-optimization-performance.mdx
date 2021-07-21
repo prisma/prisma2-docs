@@ -25,7 +25,14 @@ The n+1 problem occurs when you loop through the results of a query and perform 
 
 <div class="videoWrapper">
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/7oMfBGEdwsc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/7oMfBGEdwsc"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen
+></iframe>
 
 </div>
 
@@ -226,7 +233,7 @@ The following code results in n+1 queries - one `findMany` to get all users, and
 const users = await prisma.user.findMany({})
 
 // One query PER USER to get all posts
-users.forEach(async usr => {
+users.forEach(async (usr) => {
   const posts = await prisma.post.findMany({
     where: {
       authorId: usr.id,
@@ -293,14 +300,14 @@ If you have a list of user IDs, you can use the `in` filter to return all posts 
 ```ts
 const users = await prisma.user.findMany({})
 
-const userIds = users.map(x => x.id);
+const userIds = users.map((x) => x.id)
 
 const posts = await prisma.post.findMany({
   where: {
     authorId: {
-      in: userIds
-    }
-  }
+      in: userIds,
+    },
+  },
 })
 ```
 

@@ -120,11 +120,11 @@ Use the `mode` property on a filter as shown:
 const users = await prisma.user.findMany({
   where: {
     email: {
-      endsWith: "prisma.io",
-      mode: "insensitive", // Default value: default
+      endsWith: 'prisma.io',
+      mode: 'insensitive', // Default value: default
     },
   },
-});
+})
 ```
 
 See also: [Filtering (Case-insensitive filtering)](filtering-and-sorting#case-insensitive-filtering)
@@ -159,11 +159,11 @@ To support case-insensitive filtering, use the `mode: 'insensitive'` property on
 const users = await prisma.user.findMany({
   where: {
     email: {
-      endsWith: "prisma.io",
-      mode: "insensitive", // Default value: default
+      endsWith: 'prisma.io',
+      mode: 'insensitive', // Default value: default
     },
   },
-});
+})
 ```
 
 The MongoDB uses a RegEx rule for case-insensitive filtering.

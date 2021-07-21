@@ -103,6 +103,7 @@ The four buttons allow you to make requests to the REST API and view the respons
 ### vercel-build hook
 
 The `package.json` in the example uses the `vercel-build` hook script to run `prisma generate && prisma migrate deploy && next build`.
+
 <!-- Typically this would go in the `build` step. Because Vercel caches `node_modules` after the dependencies are installed, the functions won't have access to the generated Prisma Client. -->
 
 Generating the Prisma Client in `vercel-build` ensures that the generated Prisma Client in `node_modules/@prisma/client` is available to the functions.

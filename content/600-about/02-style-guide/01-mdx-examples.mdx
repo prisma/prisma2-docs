@@ -1,6 +1,6 @@
----	
-title: 'MDX components'	
-metaTitle: 'MDX components in the Prisma docs'	
+---
+title: 'MDX components'
+metaTitle: 'MDX components in the Prisma docs'
 metaDescription: 'MDX components components available on the Prisma documentation site.'
 navTitle: 'MDX components'
 ---
@@ -245,11 +245,11 @@ async function main() {
 
 There are 4 icons available:
 
-- <FileWithIcon text="file.pdf" icon="file"/>
-- <FileWithIcon text="dev.db" icon="database"/>
-- <FileWithIcon text="Windows" icon="display"/>
-- <FileWithIcon text="schema.ts" icon="code"/>
-- <FileWithIcon text="prisma.schema" icon="prisma"/>
+- <FileWithIcon text="file.pdf" icon="file" />
+- <FileWithIcon text="dev.db" icon="database" />
+- <FileWithIcon text="Windows" icon="display" />
+- <FileWithIcon text="schema.ts" icon="code" />
+- <FileWithIcon text="prisma.schema" icon="prisma" />
 
 ```no-lines
 <FileWithIcon text="file.pdf" icon="file"/>
@@ -340,7 +340,7 @@ Here's more!
 Example:
 
 <ButtonLink color="dark" type="primary" href="https://www.prisma.io/docs">
-  Button text	
+  Button text
 </ButtonLink>
 
 Code:
@@ -434,54 +434,50 @@ https://pris.ly/d/getting-started
 Example:
 
 <Quiz
-question="Can Prisma be used with Node.js?"
-answerOptions={
-  [
+  question="Can Prisma be used with Node.js?"
+  answerOptions={[
     {
       answer: 'It only works with potatoes',
-      isCorrect: true
+      isCorrect: true,
     },
     {
       answer: 'It can be used with any Java backend!',
-      isCorrect: false
+      isCorrect: false,
     },
     {
       answer: 'It can be used with any Node.js or TypeScript backend!',
-      isCorrect: false
+      isCorrect: false,
     },
     {
       answer: 'It can be used with a Python backend!',
-      isCorrect: false
-    }
-  ]
-  }
+      isCorrect: false,
+    },
+  ]}
 />
 
 Code:
 
-```ts
+```tsx
 <Quiz
-question="Can Prisma be used with Node.js?"
-answerOptions={
-  [
+  question="Can Prisma be used with Node.js?"
+  answerOptions={[
     {
       answer: 'It only works with potatoes',
-      isCorrect: true
+      isCorrect: true,
     },
     {
       answer: 'It can be used with any Java backend!',
-      isCorrect: false
+      isCorrect: false,
     },
     {
       answer: 'It can be used with any Node.js or TypeScript backend!',
-      isCorrect: false
+      isCorrect: false,
     },
     {
       answer: 'It can be used with a Python backend!',
-      isCorrect: false
-    }
-  ]
-  }
+      isCorrect: false,
+    },
+  ]}
 />
 ```
 

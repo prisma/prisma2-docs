@@ -425,7 +425,10 @@ const createUserAndPost = await prisma.user.create({
     email: 'elsa@prisma.io',
     name: 'Elsa Prisma',
     posts: {
-      create: [{ title: 'How to make an omelette' }, { title: 'How to eat an omelette' }],
+      create: [
+        { title: 'How to make an omelette' },
+        { title: 'How to eat an omelette' },
+      ],
     },
   },
 })
@@ -450,7 +453,10 @@ const user = await prisma.user.create({
     email: 'elsa@prisma.io',
     name: 'Elsa Prisma',
     posts: {
-      create: [{ title: 'How to make an omelette' }, { title: 'How to eat an omelette' }],
+      create: [
+        { title: 'How to make an omelette' },
+        { title: 'How to eat an omelette' },
+      ],
     },
   },
   include: {
@@ -615,19 +621,16 @@ The example uses a nested `include` to include all posts. Note that it is **not 
 ```ts highlight=5;normal
 const user = await prisma.user.create({
   data: {
-    email: "saanvi@prisma.io",
+    email: 'saanvi@prisma.io',
     posts: {
       createMany: {
-        data: [
-          { title: "My first post" },
-          { title: "My second post" }
-        ]
-      }
-    }
+        data: [{ title: 'My first post' }, { title: 'My second post' }],
+      },
+    },
   },
   include: {
-    posts: true
-  }
+    posts: true,
+  },
 })
 ```
 
@@ -783,22 +786,22 @@ If a related record may or may not already exist, use `connectOrCreate` <span cl
 ```ts
 const createPost = await prisma.post.create({
   data: {
-    title: "How to make croissants",
+    title: 'How to make croissants',
     author: {
       connectOrCreate: {
         where: {
-          email: "viola@prisma.io"
+          email: 'viola@prisma.io',
         },
         create: {
-          email: "viola@prisma.io",
-          name: "Viola"
-        }
-      }
-    }
+          email: 'viola@prisma.io',
+          name: 'Viola',
+        },
+      },
+    },
   },
   include: {
-    author: true
-  }
+    author: true,
+  },
 })
 ```
 
@@ -837,16 +840,16 @@ To `disconnect` one out of a list of records (for example, a specific blog post)
 ```ts
 const updatePost = await prisma.user.update({
   where: {
-    id: 16
+    id: 16,
   },
   data: {
     posts: {
       disconnect: [{ id: 12 }, { id: 19 }],
-    }
+    },
   },
   select: {
-    posts: true
-  }
+    posts: true,
+  },
 })
 ```
 
@@ -1064,7 +1067,7 @@ const update = await prisma.post.update({
         },
         update: {
           email: 'bob@prisma.io',
-          name: 'Bob the existing user'
+          name: 'Bob the existing user',
         },
       },
     },
@@ -1079,18 +1082,15 @@ You can nest `create` or `createMany` inside an `update` to add new related reco
 ```ts
 const user = await prisma.user.update({
   where: {
-    id: 9
+    id: 9,
   },
   data: {
     posts: {
       createMany: {
-        data: [
-          { title: "My first post", },
-          { title: "My second post" }
-        ]
-      }
-    }
-  }
+        data: [{ title: 'My first post' }, { title: 'My second post' }],
+      },
+    },
+  },
 })
 ```
 
@@ -1119,16 +1119,16 @@ const users = await prisma.user.findMany({
     posts: {
       none: {
         views: {
-          gt: 100
-        }
+          gt: 100,
+        },
       },
       every: {
         likes: {
-          lte: 50
-        }
-      }
-    }
-  }
+          lte: 50,
+        },
+      },
+    },
+  },
 })
 ```
 
@@ -1167,10 +1167,10 @@ For example, the following query returns `Post` records that meet the following 
 const usersWithZeroPosts = await prisma.user.findMany({
   where: {
     posts: {
-      none: {}
-    }
-  }
-});
+      none: {},
+    },
+  },
+})
 ```
 
 The following query returns all users with at least one post:
@@ -1179,10 +1179,10 @@ The following query returns all users with at least one post:
 const usersWithSomePosts = await prisma.user.findMany({
   where: {
     posts: {
-      some: {}
-    }
-  }
-});
+      some: {},
+    },
+  },
+})
 ```
 
 ## Fluent API
@@ -1212,7 +1212,9 @@ The main difference between the queries is that the fluent API call is translate
 This request returns all categories by a specific post:
 
 ```ts
-const categoriesOfPost: Category[] = await prisma.post.findUnique({ where: { id: 1 } }).categories()
+const categoriesOfPost: Category[] = await prisma.post
+  .findUnique({ where: { id: 1 } })
+  .categories()
 ```
 
 Note that you can chain as many queries as you like. In this example, the chaining starts at `Profile` and goes over `User` to `Post`:
@@ -1230,7 +1232,5 @@ The following query is **not possible** because `findMany` does not return a sin
 
 ```ts
 // This query is illegal
-const posts = await prisma.user
-  .findMany()
-  .posts()
+const posts = await prisma.user.findMany().posts()
 ```

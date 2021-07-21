@@ -412,7 +412,10 @@ queryType({
       resolve: (parent, { searchString }, context) => {
         return context.prisma.posts({
           where: {
-            OR: [{ title_contains: searchString }, { content_contains: searchString }],
+            OR: [
+              { title_contains: searchString },
+              { content_contains: searchString },
+            ],
           },
         })
       },
@@ -442,7 +445,7 @@ queryType({
         })
       },
     })
-  }
+  },
 })
 ```
 
@@ -493,18 +496,18 @@ const Query = queryType({
         userUniqueInput: arg({
           type: 'UserUniqueInput',
           nullable: false,
-       })
+        }),
       },
       resolve: (_, args, context) => {
         return context.prisma.user.findUnique({
           where: {
             id: args.userUniqueInput?.id,
-            email: args.userUniqueInput?.email
-          }
+            email: args.userUniqueInput?.email,
+          },
         })
-      }
+      },
     })
-  }
+  },
 })
 ```
 
@@ -585,13 +588,13 @@ const Mutation = mutationType({
             title: args.title,
             content: args.content,
             author: {
-              connect: { id: args.authorId }
-            }
-          }
+              connect: { id: args.authorId },
+            },
+          },
         })
-      }
+      },
     })
-  }
+  },
 })
 ```
 
@@ -639,25 +642,25 @@ const Mutation = mutationType({
       args: {
         userUniqueInput: arg({
           type: 'UserUniqueInput',
-          nullable: false
+          nullable: false,
         }),
-        bio: stringArg()
+        bio: stringArg(),
       },
       resolve: (_, args, context) => {
         return context.prisma.user.update({
           where: {
             id: args.userUniqueInput?.id,
-            email: args.userUniqueInput?.email
+            email: args.userUniqueInput?.email,
           },
           data: {
             profile: {
-              create: { bio: args.bio }
-            }
-          }
+              create: { bio: args.bio },
+            },
+          },
         })
-      }
+      },
     })
-  }
+  },
 })
 ```
 
@@ -678,7 +681,7 @@ mutationType({
         }),
       },
       resolve: (_, args, context) => {
-        const ids = args.categoryIds.map(id => ({ id }))
+        const ids = args.categoryIds.map((id) => ({ id }))
         return context.prisma.updatePost({
           where: {
             id: args.postId,
@@ -704,22 +707,22 @@ const Mutation = mutationType({
         postId: stringArg({ nullable: false }),
         categoryIds: stringArg({
           list: true,
-          nullable: false
+          nullable: false,
         }),
       },
       resolve: (_, args, context) => {
-        const ids = args.categoryIds.map(id => ({ id }))
+        const ids = args.categoryIds.map((id) => ({ id }))
         return context.prisma.post.update({
           where: {
-            id: args.postId
+            id: args.postId,
           },
           data: {
-            categories: { connect: ids }
-          }
+            categories: { connect: ids },
+          },
         })
-      }
+      },
     })
-  }
+  },
 })
 ```
 

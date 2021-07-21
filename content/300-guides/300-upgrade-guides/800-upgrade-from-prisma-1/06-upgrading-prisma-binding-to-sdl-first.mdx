@@ -775,13 +775,13 @@ const { PrismaClient } = require('@prisma/client')
 const server = new GraphQLServer({
   typeDefs: 'src/schema.graphql',
   resolvers,
-  context: req => ({
+  context: (req) => ({
     ...req,
     prisma: new Prisma({
       typeDefs: 'src/generated/prisma.graphql',
       endpoint: 'http://localhost:4466',
     }),
-    prisma: new PrismaClient()
+    prisma: new PrismaClient(),
   }),
 })
 ```
@@ -829,7 +829,7 @@ Since you're not using `prisma-binding` any more, you now need to resolve these 
 
 You can do so by adding a `User` field to your _resolver map_ and implement the resolvers for the `posts` and `profile` relations as follows:
 
-```js line-number highlight=8-19;add
+```js line-number highlight=8-23;add
 const resolvers = {
   Query: {
     // ... your query resolvers
@@ -839,16 +839,20 @@ const resolvers = {
   },
   User: {
     posts: (parent, args, context) => {
-      return context.prisma.user.findUnique({
-        where: { id: parent.id }
-      }).posts()
+      return context.prisma.user
+        .findUnique({
+          where: { id: parent.id },
+        })
+        .posts()
     },
     profile: (parent, args, context) => {
-       return context.prisma.user.findUnique({
-         where: { id: parent.id }
-       }).profile()
-     }
-   },
+      return context.prisma.user
+        .findUnique({
+          where: { id: parent.id },
+        })
+        .profile()
+    },
+  },
 }
 ```
 
@@ -909,7 +913,7 @@ Since you're not using `prisma-binding` any more, you now need to resolve these 
 
 You can do so by adding a `Post` field to your _resolver map_ and implement the resolvers for the `author` and `categories` relations as follows:
 
-```js line-number highlight=11-22;add
+```js line-number highlight=11-26;add
 const resolvers = {
   Query: {
     // ... your query resolvers
@@ -922,15 +926,19 @@ const resolvers = {
   },
   Post: {
     author: (parent, args, context) => {
-      return context.prisma.post.findUnique({
-        where: { id: parent.id }
-      }).author()
+      return context.prisma.post
+        .findUnique({
+          where: { id: parent.id },
+        })
+        .author()
     },
     categories: (parent, args, context) => {
-      return context.prisma.post.findUnique({
-        where:  { id: parent.id }
-      }).categories()
-    }
+      return context.prisma.post
+        .findUnique({
+          where: { id: parent.id },
+        })
+        .categories()
+    },
   },
 }
 ```
@@ -976,7 +984,7 @@ Since you're not using `prisma-binding` any more, you now need to resolve this r
 
 You can do so by adding a `Profile` field to your _resolver map_ and implement the resolvers for the `owner` relation as follows:
 
-```js line-number highlight=14-20;add
+```js line-number highlight=14-22;add
 const resolvers = {
   Query: {
     // ... your query resolvers
@@ -992,10 +1000,12 @@ const resolvers = {
   },
   Profile: {
     user: (parent, args, context) => {
-      return context.prisma.profile.findUnique({
-        where: { id: parent.id }
-      }).owner()
-    }
+      return context.prisma.profile
+        .findUnique({
+          where: { id: parent.id },
+        })
+        .owner()
+    },
   },
 }
 ```
@@ -1030,7 +1040,7 @@ Since you're not using `prisma-binding` any more, you now need to resolve this r
 
 You can do so by adding a `Category` field to your _resolver map_ and implement the resolvers for the `posts` and `profile` relations as follows:
 
-```js line-number highlight=16-22;add
+```js line-number highlight=17-25;add
 const resolvers = {
   Query: {
     // ... your query resolvers
@@ -1049,10 +1059,12 @@ const resolvers = {
   },
   Category: {
     posts: (parent, args, context) => {
-      return context.prisma.findUnique({
-        where: { id: parent.id }
-      }).posts()
-    }
+      return context.prisma
+        .findUnique({
+          where: { id: parent.id },
+        })
+        .posts()
+    },
   },
 }
 ```
@@ -1222,7 +1234,10 @@ const resolvers = {
       return context.prisma.query.posts(
         {
           where: {
-            OR: [{ title_contains: args.searchString }, { content_contains: args.searchString }],
+            OR: [
+              { title_contains: args.searchString },
+              { content_contains: args.searchString },
+            ],
           },
         },
         info
@@ -1251,7 +1266,7 @@ const resolvers = {
       })
     },
     // ... other resolvers
-  }
+  },
 }
 ```
 
@@ -1310,16 +1325,16 @@ const resolvers = {
 
 To get the same behavior with the new Prisma Client, you'll need to adjust your resolver implementation:
 
-```js line-number highlight=2-6;normal
+```js line-number highlight=3-7;normal
 const resolvers = {
   Query: {
     user: (_, args, context) => {
       return context.prisma.user.findUnique({
         where: args.userUniqueInput,
       })
-    }
+    },
     // ... other resolvers
-  }
+  },
 }
 ```
 
@@ -1371,11 +1386,11 @@ const resolvers = {
   Mutation: {
     createUser: (_, args, context, info) => {
       return context.prisma.user.create({
-        data: args.data
+        data: args.data,
       })
     },
     // ... other resolvers
-  }
+  },
 }
 ```
 
@@ -1447,9 +1462,9 @@ const resolvers = {
           },
         },
       })
-    }
+    },
     // ... other resolvers
-  }
+  },
 }
 ```
 
@@ -1515,14 +1530,14 @@ const resolvers = {
       return context.prisma.user.update({
         data: {
           profile: {
-            update: { bio: args.bio }
-          }
+            update: { bio: args.bio },
+          },
         },
-        where: args.userUniqueInput
+        where: args.userUniqueInput,
       })
     },
     // ... other resolvers
-  }
+  },
 }
 ```
 
@@ -1530,7 +1545,10 @@ You can now send the respective mutation via the GraphQL Playground :
 
 ```graphql
 mutation {
-  updateBio(userUniqueInput: { email: "alice@prisma.io" }, bio: "I like turtles") {
+  updateBio(
+    userUniqueInput: { email: "alice@prisma.io" }
+    bio: "I like turtles"
+  ) {
     id
     name
     profile {
@@ -1560,7 +1578,7 @@ type Mutation {
 const resolvers = {
   Mutation: {
     addPostToCategories: (_, args, context, info) => {
-      const ids = args.categoryIds.map(id => ({ id }))
+      const ids = args.categoryIds.map((id) => ({ id }))
       return context.prisma.mutation.updatePost(
         {
           data: {
@@ -1588,18 +1606,18 @@ To get the same behavior with Prisma Client, you'll need to adjust your resolver
 const resolvers = {
   Mutation: {
     addPostToCategories: (_, args, context, info) => {
-      const ids = args.categoryIds.map(id => ({ id }))
+      const ids = args.categoryIds.map((id) => ({ id }))
       return context.prisma.post.update({
         where: {
-          id: args.postId
+          id: args.postId,
         },
         data: {
-          categories: { connect: ids }
-        }
+          categories: { connect: ids },
+        },
       })
     },
     // ... other resolvers
-  }
+  },
 }
 ```
 

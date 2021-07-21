@@ -363,7 +363,10 @@ const user = await prisma.user.create({
     email: 'bob.rufus@prisma.io',
     name: 'Bob Rufus',
     Post: {
-      create: [{ title: 'Working at Prisma' }, { title: 'All about databases' }],
+      create: [
+        { title: 'Working at Prisma' },
+        { title: 'All about databases' },
+      ],
     },
   },
 })
@@ -374,7 +377,7 @@ const user = await prisma.user.create({
 <CodeBlock languages={["Manual", "Automatic"]}>
 
 ```ts
-return sequelize.$transaction(async t => {
+return sequelize.$transaction(async (t) => {
   const user = await User.create(
     {
       name: 'Alice',
@@ -405,7 +408,7 @@ return sequelize.$transaction(async t => {
 ```
 
 ```ts
-return sequelize.$transaction(async transaction => {
+return sequelize.$transaction(async (transaction) => {
   try {
     const user = await User.create({
       name: 'Alice',

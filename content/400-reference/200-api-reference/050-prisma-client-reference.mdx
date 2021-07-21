@@ -184,7 +184,7 @@ async function main() {
 }
 
 main()
-  .catch(e => {
+  .catch((e) => {
     throw e
   })
   .finally(async () => {
@@ -218,7 +218,7 @@ const prisma = new PrismaClient({
   log: [{ level: 'query', emit: 'event' }],
 })
 
-prisma.$on('query', e => {
+prisma.$on('query', (e) => {
   console.log(e)
 })
 
@@ -227,7 +227,7 @@ async function main() {
 }
 
 main()
-  .catch(e => {
+  .catch((e) => {
     throw e
   })
   .finally(async () => {
@@ -269,15 +269,15 @@ const prisma = new PrismaClient({
   ],
 })
 
-prisma.$on('warn', e => {
+prisma.$on('warn', (e) => {
   console.log(e)
 })
 
-prisma.$on('info', e => {
+prisma.$on('info', (e) => {
   console.log(e)
 })
 
-prisma.$on('error', e => {
+prisma.$on('error', (e) => {
   console.log(e)
 })
 
@@ -286,7 +286,7 @@ async function main() {
 }
 
 main()
-  .catch(e => {
+  .catch((e) => {
     throw e
   })
   .finally(async () => {
@@ -417,12 +417,12 @@ const prisma = new PrismaClient({
 const prisma = new PrismaClient({
   rejectOnNotFound: {
     findFirst: {
-      User: err => new Error('User error'),
-      Post: err => new Error('Post error!'),
+      User: (err) => new Error('User error'),
+      Post: (err) => new Error('Post error!'),
     },
     findUnique: {
-      User: err => new Error('User error'),
-      Post: err => new Error('Post error!'),
+      User: (err) => new Error('User error'),
+      Post: (err) => new Error('Post error!'),
     },
   },
 })
@@ -783,7 +783,7 @@ async function main() {
   ]
 
   await Promise.all(
-    users.map(async user => {
+    users.map(async (user) => {
       await prisma.user.create({
         data: user,
       })
@@ -792,7 +792,7 @@ async function main() {
 }
 
 main()
-  .catch(e => {
+  .catch((e) => {
     throw e
   })
   .finally(async () => {
@@ -1744,7 +1744,10 @@ const user = await prisma.user.create({
   data: {
     email: 'alice@prisma.io',
     posts: {
-      create: [{ title: 'This is my first post' }, { title: 'Here comes a second post' }],
+      create: [
+        { title: 'This is my first post' },
+        { title: 'Here comes a second post' },
+      ],
     },
   },
   include: { posts: true }, // Returns all fields for all posts
@@ -1894,52 +1897,51 @@ const whereScalarTitleIs = Prisma.validator<Prisma.PostScalarWhereInput>()({
   and updates any field on the `Post` model except the `Author`. The `Author` is the scalar field on the `Post` model.
 
 ```ts
-const updatePostByIdWithoutAuthor = Prisma.validator<
-  Prisma.PostUpdateWithWhereUniqueWithoutAuthorInput
->()({
-  where: {
-    id: 1,
-  },
-  data: {
-    content: 'This is some updated content',
-    published: true,
-    title: 'This is a new title',
-  },
-})
+const updatePostByIdWithoutAuthor =
+  Prisma.validator<Prisma.PostUpdateWithWhereUniqueWithoutAuthorInput>()({
+    where: {
+      id: 1,
+    },
+    data: {
+      content: 'This is some updated content',
+      published: true,
+      title: 'This is a new title',
+    },
+  })
 ```
 
 - `PostUpsertWithWhereUniqueWithoutAuthorInput` - This type will update the `Post` records title field where the id matches, if it doesn't exist it will create it instead.
 
 ```ts
-const updatePostTitleOrCreateIfNotExist = Prisma.validator<
-  Prisma.PostUpsertWithWhereUniqueWithoutAuthorInput
->()({
-  where: {
-    id: 1,
-  },
-  update: {
-    title: 'This is a new title',
-  },
-  create: {
-    id: 1,
-    title: 'If the title doesnt exist, then create one with this text',
-  },
-})
+const updatePostTitleOrCreateIfNotExist =
+  Prisma.validator<Prisma.PostUpsertWithWhereUniqueWithoutAuthorInput>()({
+    where: {
+      id: 1,
+    },
+    update: {
+      title: 'This is a new title',
+    },
+    create: {
+      id: 1,
+      title: 'If the title doesnt exist, then create one with this text',
+    },
+  })
 ```
 
 - `PostUpdateManyWithWhereWithoutAuthorInput` - This type will update all `Post` records where published is set to false.
 
 ```ts
-const publishAllPosts = Prisma.validator<Prisma.PostUpdateManyWithWhereWithoutAuthorInput>()({
-  where: {
-    published: {
-      equals: false,
+const publishAllPosts =
+  Prisma.validator<Prisma.PostUpdateManyWithWhereWithoutAuthorInput>()({
+    where: {
+      published: {
+        equals: false,
+      },
     },
-  },
-  data: {
-    published: true,
-  },
-})
+    data: {
+      published: true,
+    },
+  })
 ```
 
 ### <inlinecode>orderBy</inlinecode>
@@ -3451,7 +3453,9 @@ const getPosts = await prisma.post.findMany({
 const result = await prisma.post.findMany({
   where: {
     date_created: {
-      gte: new Date('2020-03-19T14:21:00+0200') /* Includes time offset for UTC */,
+      gte: new Date(
+        '2020-03-19T14:21:00+0200'
+      ) /* Includes time offset for UTC */,
     },
   },
 })
@@ -4627,7 +4631,7 @@ const getUsers = await prisma.user.findMany({
   where: {
     pets: {
       path: '$.sanctuaries',
-      array_starts_with:  'RSPCA',
+      array_starts_with: 'RSPCA',
     },
   },
 })
@@ -4860,7 +4864,12 @@ The following example shows how you can extract a `create` operation into a cust
 ```ts
 import { Prisma } from '@prisma/client'
 
-const createUserAndPost = (name: string, email: string, postTitle: string, profileBio: string) => {
+const createUserAndPost = (
+  name: string,
+  email: string,
+  postTitle: string,
+  profileBio: string
+) => {
   return Prisma.validator<Prisma.UserCreateInput>()({
     name,
     email,

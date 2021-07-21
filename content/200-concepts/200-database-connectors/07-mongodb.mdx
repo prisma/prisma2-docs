@@ -138,9 +138,9 @@ See also: [Defining ID fields in MongoDB](../components/prisma-schema/data-model
 To generate a valid `ObjectId` (for testing purposes or to manually set an ID field value), use the `bson` package.
 
 ```ts
-import { ObjectId } from "bson"
+import { ObjectId } from 'bson'
 
-const id = new ObjectId();
+const id = new ObjectId()
 ```
 
 ## Known limitations
@@ -163,12 +163,12 @@ MongoDB only allows you to start a transaction on a replica set. Prisma uses tra
 When you try to use Prisma's MongoDB connector on a deployment that has no replica set configured, you can experience an error message as the following:
 
 ```
-PrismaClientUnknownRequestError2 [PrismaClientUnknownRequestError]: 
+PrismaClientUnknownRequestError2 [PrismaClientUnknownRequestError]:
 Invalid `prisma.post.create()` invocation in
 /index.ts:9:21
 
    6 await prisma.$connect()
-   7 
+   7
    8 // Create the first post
 →  9 await prisma.post.create(
   Error in connector: Database error. error code: unknown, error message: Transactions are not supported by this deployment

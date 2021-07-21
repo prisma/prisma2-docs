@@ -26,9 +26,9 @@ const userEmail: Prisma.UserSelect = {
 // Use select object
 const createUser = await prisma.user.create({
   data: {
-    email: "bob@prisma.io"
+    email: 'bob@prisma.io',
   },
-  select: userEmail
+  select: userEmail,
 })
 ```
 

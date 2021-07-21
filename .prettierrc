@@ -9,8 +9,7 @@
     {
       "files": "*.mdx",
       "options": {
-        "parser": "mdx",
-        "embeddedLanguageFormatting": "off"
+        "printWidth": 80
       }
     }
   ]

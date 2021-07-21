@@ -55,7 +55,7 @@ In **long-running** applications, we recommend that you:
 To re-use a single instance, create a module that exports a `PrismaClient` object:
 
 ```ts file=client.ts
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient } from '@prisma/client'
 
 let prisma = new PrismaClient()
 
@@ -68,10 +68,10 @@ The object is [cached](https://nodejs.org/api/modules.html#modules_caching) the 
 import prisma from './client'
 
 async function main() {
-  const allUsers = await prisma.user.findMany();
+  const allUsers = await prisma.user.findMany()
 }
 
-main();
+main()
 ```
 
 You do not have to replicate the example above exactly - the goal is to make sure `PrismaClient` is cached. For example, you can [instantiate `PrismaClient` in the `context` object](https://github.com/prisma/prisma-examples/blob/9f1a6b9e7c25b9e1851bd59b273046158d748995/typescript/graphql-express/src/context.ts#L9) that you [pass into an Express app](https://github.com/prisma/prisma-examples/blob/9f1a6b9e7c25b9e1851bd59b273046158d748995/typescript/graphql-express/src/server.ts#L12).
@@ -87,21 +87,21 @@ Frameworks like [Next.js](https://nextjs.org/) support hot reloading of changed 
 As a workaround, you can store `PrismaClient` as a global variable in development environments only, as global variables are not reloaded:
 
 ```ts file=client.ts
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client'
 
 // add prisma to the NodeJS global type
 interface CustomNodeJsGlobal extends NodeJS.Global {
-  prisma: PrismaClient;
+  prisma: PrismaClient
 }
 
 // Prevent multiple instances of Prisma Client in development
-declare const global: CustomNodeJsGlobal;
+declare const global: CustomNodeJsGlobal
 
-const prisma = global.prisma || new PrismaClient();
+const prisma = global.prisma || new PrismaClient()
 
-if (process.env.NODE_ENV === "development") global.prisma = prisma;
+if (process.env.NODE_ENV === 'development') global.prisma = prisma
 
-export default prisma;
+export default prisma
 ```
 
 The way that you import and use the client does not change:
@@ -110,10 +110,10 @@ The way that you import and use the client does not change:
 import prisma from './client'
 
 async function main() {
-    const allUsers = await prisma.user.findMany();
+  const allUsers = await prisma.user.findMany()
 }
 
-main();
+main()
 ```
 
 ## Serverless environments (FaaS)
@@ -213,7 +213,7 @@ import { PrismaClient, Prisma } from '@prisma/client'
 const client = new PrismaClient()
 
 export async function handler() {
-    /* ... */
+  /* ... */
 }
 ```
 

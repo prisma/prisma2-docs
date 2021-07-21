@@ -151,12 +151,12 @@ This example shows how an `undefined` parameter impacts the results returned by 
 
 ```ts
 interface FormData {
-  name: string;
-  email?: string;
+  name: string
+  email?: string
 }
 
 const formData: FormData = {
-  name: 'Emelie'
+  name: 'Emelie',
 }
 
 const users = await prisma.user.findMany({
@@ -164,11 +164,11 @@ const users = await prisma.user.findMany({
     OR: [
       {
         email: {
-          contains: formData.email
-        }
-      }
-    ]
-  }
+          contains: formData.email,
+        },
+      },
+    ],
+  },
 })
 
 // returns: []
@@ -184,12 +184,12 @@ if you pass in an `undefined` value.
 
 ```ts
 interface FormData {
-  name: string;
-  email?: string;
+  name: string
+  email?: string
 }
 
 const formData: FormData = {
-  name: 'Emelie'
+  name: 'Emelie',
 }
 
 const users = await prisma.user.findMany({
@@ -197,11 +197,11 @@ const users = await prisma.user.findMany({
     AND: [
       {
         email: {
-          contains: formData.email
-        }
-      }
-    ]
-  }
+          contains: formData.email,
+        },
+      },
+    ],
+  },
 })
 
 // returns: { id: 1, email: 'ems@boop.com', name: 'Emelie' }
@@ -211,11 +211,11 @@ const users = await prisma.user.findMany({
     NOT: [
       {
         email: {
-          contains: formData.email
-        }
-      }
-    ]
-  }
+          contains: formData.email,
+        },
+      },
+    ],
+  },
 })
 
 // returns: { id: 1, email: 'ems@boop.com', name: 'Emelie' }

@@ -220,7 +220,7 @@ async function main() {
 }
 
 main()
-  .catch(e => {
+  .catch((e) => {
     throw e
   })
   .finally(async () => {
@@ -278,7 +278,14 @@ SELECT "public"."User"."country", "public"."User"."city", "public"."User"."email
 The following video demonstrates how to use `createMany` and [faker.js](https://github.com/marak/Faker.js/) to seed a database with sample data:
 
 <div class="videoWrapper">
-<iframe width="560" height="315" src="https://www.youtube.com/embed/QxyqR4yh1GI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <iframe
+    width="560"
+    height="315"
+    src="https://www.youtube.com/embed/QxyqR4yh1GI"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+  ></iframe>
 </div>
 
 ### Create records and connect or create related records
@@ -313,7 +320,7 @@ If you are using the MongoDB connector and your underlying ID type is `ObjectId`
 // By ID
 const user = await prisma.user.findUnique({
   where: {
-    id: "60d5922d00581b8f0062e3a8",
+    id: '60d5922d00581b8f0062e3a8',
   },
 })
 ```
@@ -930,18 +937,17 @@ The second tab shows performing the same function but with a MySQL database. In 
 <tab>
 
 ```ts
-  for (const {
-    tablename,
-  } of await prisma.$queryRaw`SELECT tablename FROM pg_tables WHERE schemaname='public'`) {
-
-      if (tablename !== '_prisma_migrations') {
-        try {
-          await prisma.$queryRaw(`TRUNCATE TABLE "public"."${tablename}" CASCADE;`);
-        } catch (error) {
-          console.log({error})
-        }
+for (const {
+  tablename,
+} of await prisma.$queryRaw`SELECT tablename FROM pg_tables WHERE schemaname='public'`) {
+  if (tablename !== '_prisma_migrations') {
+    try {
+      await prisma.$queryRaw(`TRUNCATE TABLE "public"."${tablename}" CASCADE;`)
+    } catch (error) {
+      console.log({ error })
     }
   }
+}
 ```
 
 </tab>
@@ -949,28 +955,28 @@ The second tab shows performing the same function but with a MySQL database. In 
 <tab>
 
 ```ts
-  const transactions: PrismaPromise<any>[] = [];
-    transactions.push(prisma.$executeRaw`SET FOREIGN_KEY_CHECKS = 0;`)
+const transactions: PrismaPromise<any>[] = []
+transactions.push(prisma.$executeRaw`SET FOREIGN_KEY_CHECKS = 0;`)
 
-    for (const { TABLE_NAME } of await prisma.$queryRaw`SELECT TABLE_NAME from information_schema.TABLES WHERE TABLE_SCHEMA = 'tests';`) {
-      if (TABLE_NAME !== "_prisma_migrations") {
-        try {
-          transactions.push(prisma.$executeRaw(
-            `TRUNCATE ${TABLE_NAME};`
-          ));
-        } catch (error) {
-          console.log({error})
-        }
-      }
-    }
-
-    transactions.push(prisma.$executeRaw`SET FOREIGN_KEY_CHECKS = 1;`);
-
+for (const {
+  TABLE_NAME,
+} of await prisma.$queryRaw`SELECT TABLE_NAME from information_schema.TABLES WHERE TABLE_SCHEMA = 'tests';`) {
+  if (TABLE_NAME !== '_prisma_migrations') {
     try {
-      await prisma.$transaction(transactions);
+      transactions.push(prisma.$executeRaw(`TRUNCATE ${TABLE_NAME};`))
     } catch (error) {
-      console.log({error})
+      console.log({ error })
     }
+  }
+}
+
+transactions.push(prisma.$executeRaw`SET FOREIGN_KEY_CHECKS = 1;`)
+
+try {
+  await prisma.$transaction(transactions)
+} catch (error) {
+  console.log({ error })
+}
 ```
 
 </tab>

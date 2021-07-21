@@ -14,17 +14,17 @@ const prisma = new PrismaClient()
 // Middleware 1
 prisma.$use(async (params, next) => {
   // Manipulate params here
-  const result = await next(params);
+  const result = await next(params)
   // See results here
-  return result;
+  return result
 })
 
 // Middleware 2
 prisma.$use(async (params, next) => {
   // Manipulate params here
-  const result = await next(params);
+  const result = await next(params)
   // See results here
-  return result;
+  return result
 })
 
 // Queries here
@@ -60,10 +60,10 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 prisma.$use(async (params, next) => {
-    // Manipulate params here
-    const result = await next(params);
-    // See results here
-    return result;
+  // Manipulate params here
+  const result = await next(params)
+  // See results here
+  return result
 })
 
 const app = express()

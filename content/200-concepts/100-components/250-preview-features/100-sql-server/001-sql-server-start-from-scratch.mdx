@@ -4,7 +4,10 @@ langSwitcher: ['typescript', 'node']
 techMetaTitles:
   [
     { name: 'node', value: 'SQL Server Start from Scratch | Node.js | Prisma' },
-    { name: 'typescript', value: 'SQL Server Start from Scratch | TypeScript | Prisma' },
+    {
+      name: 'typescript',
+      value: 'SQL Server Start from Scratch | TypeScript | Prisma',
+    },
   ]
 techMetaDescriptions:
   [
@@ -153,7 +156,7 @@ To connect to your Microsoft SQL Server database:
 
    The following example connection URL [uses SQL authentication](sql-server-local#enable-authentication-with-sql-logins-optional), but there are [other ways to format your connection URL](sql-server-connection-string):
 
-   ```js file=prisma/.env
+   ```bash file=prisma/.env
    DATABASE_URL="sqlserver://localhost:1433;database=mydb;user=sa;password=r@ndomP@$$w0rd;trustServerCertificate=true"
    ```
 
@@ -486,7 +489,7 @@ Prisma Client is an auto-generated, type-safe query builder based on your data m
    }
 
    main()
-     .catch(e => {
+     .catch((e) => {
        throw e
      })
      .finally(async () => {
@@ -560,7 +563,7 @@ Prisma Client is an auto-generated, type-safe query builder based on your data m
    }
 
    main()
-     .catch(e => {
+     .catch((e) => {
        throw e
      })
      .finally(async () => {

@@ -158,7 +158,10 @@ async function main() {
   var postsCreated = await prisma.$transaction(posts)
 
   console.log(
-    'Posts created with IDs: ' + '\u001b[1;32m' + postsCreated.map(x => x.id) + '\u001b[0m'
+    'Posts created with IDs: ' +
+      '\u001b[1;32m' +
+      postsCreated.map((x) => x.id) +
+      '\u001b[0m'
   )
 
   // Delete the first post from the array
@@ -180,14 +183,16 @@ async function main() {
   const getPosts = await prisma.post.findMany({
     where: {
       id: {
-        in: postsCreated.map(x => x.id),
+        in: postsCreated.map((x) => x.id),
       },
     },
   })
 
   console.log()
 
-  console.log('Deleted post with ID: ' + '\u001b[1;32m' + deletePost.id + '\u001b[0m')
+  console.log(
+    'Deleted post with ID: ' + '\u001b[1;32m' + deletePost.id + '\u001b[0m'
+  )
   console.log(
     'Deleted posts with IDs: ' +
       '\u001b[1;32m' +
@@ -213,7 +218,9 @@ async function main() {
       deleted: true,
     },
   })
-  console.log('Number of SOFT deleted posts: ' + '\u001b[1;32m' + r.length + '\u001b[0m')
+  console.log(
+    'Number of SOFT deleted posts: ' + '\u001b[1;32m' + r.length + '\u001b[0m'
+  )
 }
 
 main()
@@ -336,7 +343,7 @@ async function main() {
       if (params.action == 'update') {
         // Change to updateMany - you cannot filter
         // by anything except ID / unique with findUnique
-        params.action = "updateMany";
+        params.action = 'updateMany'
         // Add 'deleted' filter
         // ID filter maintained
         params.args.where['deleted'] = false
@@ -401,7 +408,10 @@ async function main() {
   var postsCreated = await prisma.$transaction(posts)
 
   console.log(
-    'Posts created with IDs: ' + '\u001b[1;32m' + postsCreated.map(x => x.id) + '\u001b[0m'
+    'Posts created with IDs: ' +
+      '\u001b[1;32m' +
+      postsCreated.map((x) => x.id) +
+      '\u001b[0m'
   )
 
   // Delete the first post from the array
@@ -429,7 +439,7 @@ async function main() {
   const getPosts = await prisma.post.findMany({
     where: {
       id: {
-        in: postsCreated.map(x => x.id),
+        in: postsCreated.map((x) => x.id),
       },
     },
   })
@@ -437,7 +447,7 @@ async function main() {
   const getPostsAnDeletedPosts = await prisma.post.findMany({
     where: {
       id: {
-        in: postsCreated.map(x => x.id),
+        in: postsCreated.map((x) => x.id),
       },
       deleted: true,
     },
@@ -456,7 +466,7 @@ async function main() {
     where: {
       deleted: true,
       id: {
-        in: postsCreated.map(x => x.id),
+        in: postsCreated.map((x) => x.id),
       },
     },
     data: {
@@ -466,7 +476,12 @@ async function main() {
 
   console.log()
 
-  console.log('Deleted post (delete) with ID: ' + '\u001b[1;32m' + deletePost.id + '\u001b[0m')
+  console.log(
+    'Deleted post (delete) with ID: ' +
+      '\u001b[1;32m' +
+      deletePost.id +
+      '\u001b[0m'
+  )
   console.log(
     'Deleted posts (deleteMany) with IDs: ' +
       '\u001b[1;32m' +
@@ -519,7 +534,9 @@ async function main() {
   console.log('\u001b[1;34m#################################### \u001b[0m')
   // 4. Count ALL posts
   const f = await prisma.post.findMany({})
-  console.log('Number of active posts: ' + '\u001b[1;32m' + f.length + '\u001b[0m')
+  console.log(
+    'Number of active posts: ' + '\u001b[1;32m' + f.length + '\u001b[0m'
+  )
 
   // 5. Count DELETED posts
   const r = await prisma.post.findMany({
@@ -527,7 +544,9 @@ async function main() {
       deleted: true,
     },
   })
-  console.log('Number of SOFT deleted posts: ' + '\u001b[1;32m' + r.length + '\u001b[0m')
+  console.log(
+    'Number of SOFT deleted posts: ' + '\u001b[1;32m' + r.length + '\u001b[0m'
+  )
 }
 
 main()

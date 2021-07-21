@@ -6,7 +6,10 @@ dbSwitcher: ['postgres', 'mysql']
 techMetaTitles:
   [
     { name: 'mysql', value: 'Upgrading the Prisma layer to Prisma 2 | MySQL' },
-    { name: 'postgres', value: 'Upgrading the Prisma layer to Prisma 2 | PostgreSQL' },
+    {
+      name: 'postgres',
+      value: 'Upgrading the Prisma layer to Prisma 2 | PostgreSQL',
+    },
   ]
 techMetaDescriptions:
   [
@@ -228,7 +231,7 @@ endpoint: http://localhost:4466/myproject/dev
 
 Based on these connection details, you need to configure the `DATABASE_URL` environment variable inside your `.env` file as follows:
 
-```js file=.env
+```bash file=.env
 DATABASE_URL="postgresql://janedoe:randompassword@localhost:5432/prisma?schema=myproject$dev"
 ```
 
@@ -242,7 +245,7 @@ endpoint: http://localhost:4466/
 
 In that case, the `schema` must be specified as follows:
 
-```js file=.env
+```bash file=.env
 DATABASE_URL="postgresql://janedoe:randompassword@localhost:5432/prisma?schema=default$default"
 ```
 
@@ -270,7 +273,7 @@ endpoint: http://localhost:4466/myproject/dev
 
 Based on these connection details, you need to configure the `DATABASE_URL` environment variable inside your `.env` file as follows:
 
-```js file=.env
+```bash file=.env
 DATABASE_URL="mysql://root:randompassword@localhost:3306/myproject@dev"
 ```
 
@@ -284,7 +287,7 @@ endpoint: http://localhost:4466/
 
 In that case, the database name must be specified as follows:
 
-```js file=.env
+```bash file=.env
 DATABASE_URL="mysql://root:randompassword@localhost:3306/default@default"
 ```
 

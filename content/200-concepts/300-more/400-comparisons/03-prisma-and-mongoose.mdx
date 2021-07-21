@@ -48,7 +48,10 @@ const user = await prisma.user.findUnique({
 **Mongoose**
 
 ```ts
-const user = await User.findById('5eb9354624286a04e42401d8').select(['name', 'email'])
+const user = await User.findById('5eb9354624286a04e42401d8').select([
+  'name',
+  'email',
+])
 ```
 
 ## Fetching relations
