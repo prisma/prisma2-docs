@@ -672,16 +672,6 @@ npx prisma db push --schema=/tmp/schema.prisma
 
 > **Note**: `db seed` is currently in [Preview](../../../about/releases#preview). Features in Preview may still have some issues, and are not recommended for use in production environments. To access commands in Preview, you must opt-in via the `--preview-feature` flag. For a simple and integrated way to re-create data in your development database as often as needed, check out our [seeding guide](../../../guides/database/seed-database).
 
-#### Remarks
-
-- In [2.18.0](https://github.com/prisma/prisma/releases/tag/2.18.0) and later you can pass `--compiler-options` into the `ts-node` command that runs seed scripts (for example, if you are working with Next.js, which has specific requirements for `ts-node`.) Prisma's script is specifically named `ts-node`:
-
-  ```js
-  "scripts": {
-    "ts-node": "ts-node --compiler-options '{\\\"module\\\":\\\"commonjs\\\"}'"
-  },
-  ```
-
 #### Options
 
 | Options             | Required | Description                             |

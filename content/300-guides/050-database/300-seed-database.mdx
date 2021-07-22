@@ -10,89 +10,36 @@ This guide describes how to seed your database using Prisma Client and Prisma's 
 - Populate your database with data that is required for your application to start - for example, a default language or a default currency.
 - Provide basic data for validating and using your application in a development environment. This is particulary useful if you are using Prisma Migrate, which sometimes requires resetting your development database.
 
-Watch the following video for an introduction to the `db seed` command:
-
-<div class="videoWrapper">
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2LwTUIqjbPo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-</div>
-
 </TopBlock>
 
 ## Requirements for seeding with TypeScript or JavaScript
 
-Prisma's integrated seeding functionality expects the following:
+Prisma's integrated seeding functionality expects a command in the `"prisma"` key of your `package.json`. It should look something like this:
 
-<!-- prettier-ignore-start -->
+```json
+"prisma": {
+  "seed": "ts-node prisma/seed.ts"
+},
+```
 
-1. A `seed.ts` or `seed.js` file in the [same location as your `schema.prisma` file](../../concepts/components/prisma-schema#prisma-schema-file-location).
-2. **One** of the following inside the `seed.js`/`seed.ts` file:
+The command can be anything. If your seed script is a Node.js script, for example, you can use:
 
-    - A script inside `seed.ts` / `seed.js`
-    - An export named `seed` ([2.23.0](https://github.com/prisma/prisma/releases/tag/2.23.0) and later):
+```json
+"prisma": {
+  "seed": "node prisma/seed.js"
+},
+```
 
-      <TabbedContent tabs={[<FileWithIcon text="TypeScript" icon="code"/>, <FileWithIcon text="JavaScript" icon="code"/>]}>
-      <tab>
+The location of the seed script is also free, although we recommend putting it in the `prisma/` folder by convention.
 
-      ```ts
-      export async function seed() {
-        // Prisma create query to seed models in database
-      }
-      ```
-
-      </tab>
-      <tab>
-
-      ```js
-      async function seed() {
-        // Prisma create query to seed models in database
-      }
-
-      module.exports = {
-        seed
-      }
-      ```
-
-      </tab>
-      </TabbedContent>
-
-    - A default export ([2.23.0](https://github.com/prisma/prisma/releases/tag/2.23.0) and later):
-
-      <TabbedContent tabs={[<FileWithIcon text="TypeScript" icon="code"/>, <FileWithIcon text="JavaScript" icon="code"/>]}>
-      <tab>
-
-      ```ts
-      async function seed() {
-        // Prisma create query to seed models in database
-      }
-      export default seed;
-      ```
-
-      </tab>
-      <tab>
-
-      ```js
-      async function seed() {
-        // Prisma create query to seed models in database
-      }
-
-      module.exports = seed
-      ```
-
-      </tab>
-      </TabbedContent>
-
-<!-- prettier-ignore-end -->
-
-3. Optional [compiler options](#compiler-options) if you are using TypeScript.
+This is the only requirement. The next sections are recommendations on how to set up seeds with Prisma Client, but any executable command can be used.
 
 ## Seeding your database with TypeScript
 
 To seed your database with TypeScript:
 
 1. Create a new file named `seed.ts` in the same location as your `schema.prisma`.
-2. In the `seed.ts` file, import Prisma Client, instantiate it, and create some records. The following example uses a script, but you can also [use an `export`](#requirements-for-seeding-with-typescript-or-javascript):
+2. In the `seed.ts` file, import Prisma Client, instantiate it, and create some records:
 
    ```ts
    import { PrismaClient } from '@prisma/client'
@@ -158,14 +105,14 @@ To seed your database with TypeScript:
 
 <a id="compiler-options"></a>
 
-4. Optionally, add additional `--compiler-options` to the script that Prisma uses to run the seed script ([2.18.0](https://github.com/prisma/prisma/releases/tag/2.18.0) and later). This makes `prisma db seed` work with tools that have specific requirements when used with TypeScript, such as Next.js. The name of the script is `ts-node`:
+4. Add the `prisma.seed` key to your project's `package.json`:
 
    ```js highlight=5;normal
    {
      "name": "my-project",
      "version": "1.0.0",
-     "scripts": {
-       "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\""
+     "prisma": {
+       "seed": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\" prisma/seed.ts"
      },
      "devDependencies": {
        "@types/node": "^14.14.21",
@@ -174,6 +121,8 @@ To seed your database with TypeScript:
      }
    }
    ```
+
+This example shows you can add additional `--compiler-options` to the `ts-node` command if you are using tools that have specific requirements when used with TypeScript, such as Next.js.
 
 5. To seed the database, run the `db seed` CLI command:
 
@@ -186,7 +135,7 @@ To seed your database with TypeScript:
 To seed your database with JavaScript:
 
 1. Create a new file named `seed.js` in the same location as your `schema.prisma`.
-2. In the `seed.js` file, import Prisma Client, initialize it and create some records. The following example uses a script, but you can also [use an `export`](#requirements-for-seeding-with-typescript-or-javascript):
+2. In the `seed.js` file, import Prisma Client, initialize it and create some records:
 
    ```js
    const { PrismaClient } = require('@prisma/client')
@@ -244,7 +193,19 @@ To seed your database with JavaScript:
      })
    ```
 
-3. To seed the database, run the `db seed` CLI command:
+3. Add the `"seed"` key in your project's `package.json`:
+
+   ```js highlight=5;normal
+   {
+     "name": "my-project",
+     "version": "1.0.0",
+     "prisma": {
+       "seed": "node prisma/seed.js"
+     }
+   }
+   ```
+
+4. To seed the database, run the `db seed` CLI command:
 
    ```
    prisma db seed --preview-feature
@@ -252,7 +213,7 @@ To seed your database with JavaScript:
 
 ## Seeding your database with a Bash script
 
-In addition to TypeScript and JavaScript, you can also use a Bash script (`seed.sh`) to seed your database in another language such as Go, or plain SQL.
+In addition to TypeScript and JavaScript, you can also use a Bash script (`seed.sh`), for example to seed your database in another language such as Go, or plain SQL.
 
 The following example runs a Go script in the same folder as `seed.sh`:
 
@@ -276,9 +237,11 @@ set -ex
 psql file.sql
 ```
 
+In both cases, putting the command directly under `prisma.seed` in `package.json` would also work.
+
 ## Integrated seeding with Prisma Migrate
 
 Prisma Migrate integrates seamlessly with your seeds, assuming you follow the steps in the previous section. When Prisma Migrate resets the development database, seeding is triggered automatically. Prisma Migrate resets the database and triggers seeding in the following scenarios:
 
 - You manually run the `prisma migrate reset` CLI command.
-- The database is reset interactively in the context of using `prisma migrate dev` - for example, as a result of migration history conflicts or database drift.
+- The database is reset interactively in the context of using `prisma migrate dev` - for example, as a result of migration history conflicts or database schema drift.
